@@ -1,2 +1,2 @@
-# data-structure
-BAsic data structures C# implementation
+# .net-k8s basics of kubernetes for .net
+
