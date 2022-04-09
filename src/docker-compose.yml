@@ -6,16 +6,41 @@ services:
     command: --api.insecure=true --providers.docker
     ports:
     - "81:80"
-    - "8081:8080"
+    - "443:443"
+    - "8080:8080"
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
+    - ./letsencrypt:/letsencrypt
+    - ./traefik.yml:/etc/traefik/traefik.yml
 
   identity:
     image: ${DOCKER_REGISTRY-}identity
     ports:
-    - "5000:80"
+    - "5010:80"
+    - "5011:443"
     labels:
-      - "traefik.http.routers.identity.rule=Host(`identity.docker.localhost`)"
+      - "traefik.enable=true"
+      - "traefik.http.routers.identity.rule=Host(`identity.localhost`)"
+      - "traefik.http.routers.identity.entrypoints=web"
+      - "traefik.http.routers.identity.service=identity"
+      - "traefik.http.services.identity.loadbalancer.server.port=5010"
+      - "traefik.http.routers.identity.tls=true"
     build:
       context: .
       dockerfile: IdentityServer/Dockerfile
+
+  api:
+    image: ${DOCKER_REGISTRY-}api
+    ports:
+    - "5020:80"
+    - "5021:443"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`api.localhost`)"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.routers.api.service=api"
+      - "traefik.http.routers.api.tls=true"
+      - "traefik.http.services.api.loadbalancer.server.port=5020"
+    build:
+      context: .
+      dockerfile: Services/API/Dockerfile

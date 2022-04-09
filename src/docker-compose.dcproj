@@ -9,6 +9,8 @@
     <DockerServiceName>identityserver</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="certs\ssl-generator.sh" />
+    <None Include="traefik.yml" />
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>

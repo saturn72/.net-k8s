@@ -7,6 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityS
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A79613ED-7CA9-485D-866B-B5B9362D65B7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_scripts", "_scripts", "{EF2AEBB3-576D-4C47-877F-F6F4A1E0C19C}"
+	ProjectSection(SolutionItems) = preProject
+		_scripts\ssl.sh = _scripts\ssl.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{CD9021A8-279A-48DB-A731-5202FB63EB72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datafeed.Rest", "Services\Datafeed.Rest\Datafeed.Rest.csproj", "{8823DADC-6A65-4797-8D96-0DBD0037A0B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Datafeed.Rest.Tests", "Services\Datafeed.Rest.Tests\Datafeed.Rest.Tests.csproj", "{F619D62D-B7F1-4502-B899-EDA48C719B93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +32,21 @@ Global
 		{A79613ED-7CA9-485D-866B-B5B9362D65B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A79613ED-7CA9-485D-866B-B5B9362D65B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A79613ED-7CA9-485D-866B-B5B9362D65B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8823DADC-6A65-4797-8D96-0DBD0037A0B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8823DADC-6A65-4797-8D96-0DBD0037A0B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8823DADC-6A65-4797-8D96-0DBD0037A0B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8823DADC-6A65-4797-8D96-0DBD0037A0B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F619D62D-B7F1-4502-B899-EDA48C719B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F619D62D-B7F1-4502-B899-EDA48C719B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F619D62D-B7F1-4502-B899-EDA48C719B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F619D62D-B7F1-4502-B899-EDA48C719B93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8823DADC-6A65-4797-8D96-0DBD0037A0B3} = {CD9021A8-279A-48DB-A731-5202FB63EB72}
+		{F619D62D-B7F1-4502-B899-EDA48C719B93} = {CD9021A8-279A-48DB-A731-5202FB63EB72}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19137789-CCA3-49D4-861D-AF05D57D7E24}

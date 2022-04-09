@@ -1,0 +1,21 @@
+api:
+  dashboard: true
+  insecure: true
+providers:
+  docker:
+    exposedByDefault: false
+log:
+  level: INFO
+
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+
+tls:
+  certificates:
+    - certFile: ./certs/identity.cert
+      keyFile: ./certs/identity.key
+    - certFile: ./certs/api.cert
+      keyFile: ./certs/api.key
