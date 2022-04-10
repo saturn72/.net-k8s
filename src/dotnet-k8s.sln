@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServer\IdentityServer.csproj", "{4B5ECE7E-7124-4BE6-BFD7-F67889C3E110}"
-EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A79613ED-7CA9-485D-866B-B5B9362D65B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_scripts", "_scripts", "{EF2AEBB3-576D-4C47-877F-F6F4A1E0C19C}"
@@ -18,16 +16,26 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datafeed.Rest", "Services\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Datafeed.Rest.Tests", "Services\Datafeed.Rest.Tests\Datafeed.Rest.Tests.csproj", "{F619D62D-B7F1-4502-B899-EDA48C719B93}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{83B4411C-FDFE-414A-8041-2506E2C617A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "Infrastructure\IdentityServer\IdentityServer.csproj", "{302160FF-612B-4E55-9F17-7A211C842179}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "certs", "certs", "{8B0AE2CC-5B78-493E-AB35-6AA8EB963C27}"
+	ProjectSection(SolutionItems) = preProject
+		certs\ca.crt = certs\ca.crt
+		certs\ca.key = certs\ca.key
+		certs\identity.crt = certs\identity.crt
+		certs\identity.csr = certs\identity.csr
+		certs\identity.key = certs\identity.key
+		certs\ssl-generator.sh = certs\ssl-generator.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4B5ECE7E-7124-4BE6-BFD7-F67889C3E110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B5ECE7E-7124-4BE6-BFD7-F67889C3E110}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B5ECE7E-7124-4BE6-BFD7-F67889C3E110}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B5ECE7E-7124-4BE6-BFD7-F67889C3E110}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A79613ED-7CA9-485D-866B-B5B9362D65B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A79613ED-7CA9-485D-866B-B5B9362D65B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A79613ED-7CA9-485D-866B-B5B9362D65B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,6 +48,10 @@ Global
 		{F619D62D-B7F1-4502-B899-EDA48C719B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F619D62D-B7F1-4502-B899-EDA48C719B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F619D62D-B7F1-4502-B899-EDA48C719B93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{302160FF-612B-4E55-9F17-7A211C842179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{302160FF-612B-4E55-9F17-7A211C842179}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{302160FF-612B-4E55-9F17-7A211C842179}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{302160FF-612B-4E55-9F17-7A211C842179}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +59,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8823DADC-6A65-4797-8D96-0DBD0037A0B3} = {CD9021A8-279A-48DB-A731-5202FB63EB72}
 		{F619D62D-B7F1-4502-B899-EDA48C719B93} = {CD9021A8-279A-48DB-A731-5202FB63EB72}
+		{302160FF-612B-4E55-9F17-7A211C842179} = {83B4411C-FDFE-414A-8041-2506E2C617A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19137789-CCA3-49D4-861D-AF05D57D7E24}

@@ -20,17 +20,18 @@ openssl x509 -req -passin pass:1111 -days 365 -in identity.csr -CA ca.crt -CAkey
 echo Remove passphrase from identity key:
 openssl rsa -passin pass:1111 -in identity.key -out identity.key
 
-echo Generate api key
-openssl genrsa -passout pass:1111 -des3 -out api.key 4096
+echo Generate root key:
+openssl genrsa -passout pass:1111 -des3 -out root.key 4096
 
-echo Generate api signing request:
-openssl req -passin pass:1111 -new -key api.key -out api.csr -subj  "//CN=${SERVER_CN}"
+echo Generate root signing request:
+openssl req -passin pass:1111 -new -key root.key -out root.csr -subj  "//CN=${SERVER_CN}"
 
-echo Self-sign api certificate:
-openssl x509 -passin pass:1111 -req -days 365 -in api.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out api.crt
+echo Self-sign root certificate:
+openssl x509 -req -passin pass:1111 -days 365 -in root.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out root.crt
 
-echo Remove passphrase from api key:
-openssl rsa -passin pass:1111 -in api.key -out api.key
+echo Remove passphrase from root key:
+openssl rsa -passin pass:1111 -in root.key -out root.key
+
 
 # copy to another path
 # cp ca.crt ./path/to/localtion/ca.crt

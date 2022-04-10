@@ -23,6 +23,7 @@ namespace Datafeed.Rest.Controllers
         private readonly ISystemClock _systemClock;
         private readonly IEventBus _eventBus;
 
+        private const string Latest = "latest";
         public AccountController(
             IAccountService accountService,
             IPermissionManager permissionManager,
@@ -40,13 +41,13 @@ namespace Datafeed.Rest.Controllers
             _eventBus = eventBus;
         }
 
-        [HttpGet("{accountName}/{endpoint}/{version}")]
+        [HttpGet("{accountName}/{endpoint}")]
         public async Task<IActionResult> GetAll(
             string accountName,
             string endpoint,
-            string version,
-            int offSet = 0,
-            int pageSize = 100)
+            [FromQuery] string version = Latest,
+            [FromQuery] int offSet = 0,
+            [FromQuery] int pageSize = 100)
         {
             var account = await _accountService.GetAccountByName(accountName);
             string subject;
