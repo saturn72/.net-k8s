@@ -4,6 +4,6 @@ namespace Datafeed.Rest.Services.Security.Permission
 {
     public interface IPermissionManager
     {
-        Task<bool> UserPermittedForEndpoint(string userId, Account account, string endpoint);
+        Task<bool> UserIsPermittedForEndpoint(string userId, AccountEndpoint endpoint);
     }
 }

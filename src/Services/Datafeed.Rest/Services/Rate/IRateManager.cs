@@ -4,6 +4,6 @@ namespace Datafeed.Rest.Services.Rate
 {
     public interface IRateManager
     {
-        Task<bool> UserExceededAccessToEndpointAction(string userId, Account account, string endpoint, string action);
+        Task<bool> UserExceededAccessToAccountEndpointVersionAction(string userId, AccountEndpoint endpoint, string version, string action);
     }
 }

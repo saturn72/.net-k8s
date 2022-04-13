@@ -6,9 +6,9 @@ namespace Datafeed.Rest.Services.ActivityLog
     {
         public Account? Accout { get; init; }
         public DateTimeOffset? ConsumedOnUtc { get; init; }
-        public string? Endpoint { get; init; }
+        public AccountEndpoint? Endpoint { get; init; }
         public string? Query { get; init; }
-        public string? UserId { get; init; }
+        public string? ConsumedByUserId { get; init; }
         public string? Version { get; init; }
     }
 }

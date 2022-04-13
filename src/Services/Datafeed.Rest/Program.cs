@@ -1,6 +1,9 @@
+using Datafeed.Rest.Configurars;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+_ = new ConfigurarRoot(builder);
 
 builder.Services.AddControllers();
 
