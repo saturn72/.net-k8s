@@ -1,16 +1,16 @@
 ﻿using Datafeed.Rest.Domain;
 using System.ComponentModel;
 
-namespace Datafeed.Rest.Services.Endpoints
+namespace Datafeed.Rest.Services
 {
-    public record AccountEndpointVersionContext
+    public abstract record ActionContext
     {
         private string? _error;
 
+        public abstract string ActionName { get; }
+
         public object? Data { get; set; }
-        public Account? Account { get; set; }
-        public AccountEndpoint? Endpoint { get; set; }
-        public string? Version { get; set; }
+        public Template? Template { get; set; }
 
         [DefaultValue(false)]
         public bool IsError { get; private set; }
@@ -25,5 +25,6 @@ namespace Datafeed.Rest.Services.Endpoints
                 IsError = true;
             }
         }
+        public string? UserId { get; set; }
     }
 }

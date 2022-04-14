@@ -1,9 +1,7 @@
-﻿using Datafeed.Rest.Domain;
-
-namespace Datafeed.Rest.Services.Security.Permission
+﻿namespace Datafeed.Rest.Services.Security.Permission
 {
     public interface IPermissionManager
     {
-        Task<bool> UserIsPermittedForEndpoint(string userId, AccountEndpoint endpoint);
+        Task<bool> UserIsPermittedForTemplateAction(string userId, ActionContext context);
     }
 }
