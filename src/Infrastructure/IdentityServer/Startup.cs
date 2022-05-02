@@ -7,14 +7,14 @@ namespace IdentityServer
 {
     public class Startup
     {
-        public IWebHostEnvironment Environment { get; }
+        private readonly IWebHostEnvironment _env;
 
         public Startup(IWebHostEnvironment environment)
         {
-            Environment = environment;
+            _env = environment;
         }
 
-        public void ConfigureServices(IServiceCollection services, IWebHostEnvironment environment)
+        public void ConfigureServices(IServiceCollection services)
         {
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
@@ -28,10 +28,10 @@ namespace IdentityServer
                 .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryClients(Config.Clients);
 
-            if (environment.IsDevelopment())
+            //if (_env.IsDevelopment())
                 builder.AddDeveloperSigningCredential();
-            else
-                throw new System.NotImplementedException("no signing credential was set for non-dev environment");
+            //else
+            //    throw new System.NotImplementedException("no signing credential was set for non-dev environment");
         }
 
         public void Configure(IApplicationBuilder app)

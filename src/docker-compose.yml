@@ -3,7 +3,7 @@ version: '3.4'
 services:
   reverse-proxy:
     image: traefik:v2.6
-    command: --api.insecure=true --providers.docker
+    container_name: traefik
     ports:
     - "81:80"
     - "443:443"
@@ -14,17 +14,18 @@ services:
 
   identity:
     image: ${DOCKER_REGISTRY-}identity
+    container_name: identity
     ports:
     - "5010:80"
-    #- "5011:443"
+    - "5011:443"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.identity.rule=Host(`identity.localhost`)"
+      - "traefik.http.routers.identity.rule=Host(`identity`)"
       - "traefik.http.routers.identity.service=identity"
       - "traefik.http.routers.identity.entrypoints=websecure"
-      #- "traefik.http.services.identity.loadbalancer.servers.url=http://identity"
+      # - "traefik.http.services.identity.loadbalancer.servers.url=http://identity"
+      - "traefik.http.routers.identity.tls=true"
       - "traefik.http.services.identity.loadbalancer.server.port=5010"
-      - "traefik.http.routers.identity.tls={}"
     build:
       context: .
       dockerfile: Infrastructure/IdentityServer/Dockerfile

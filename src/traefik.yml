@@ -7,12 +7,6 @@ providers:
 log:
   level: INFO
 
-serversTransport:
-  rootCAs:
-    - ./certs/ca.cert
-    - ./certs/identity.cert
-    - ./certs/root.cert
-
 entryPoints:
   web:
     address: ":80"
