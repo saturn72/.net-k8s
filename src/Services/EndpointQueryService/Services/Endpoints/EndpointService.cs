@@ -1,4 +1,5 @@
 ﻿using EasyCaching.Core;
+using EndpointQueryService.Data.Endpoints;
 using EndpointQueryService.Domain;
 
 namespace EndpointQueryService.Services.Endpoints
@@ -46,7 +47,7 @@ namespace EndpointQueryService.Services.Endpoints
 
             var key = CacheSettings.Endpoint.BuildGetPathKey(path);
             var cv = await _cache.GetAsync(key,
-                () => _endpointRepository.GetEndpointByPath(path),
+                () => _endpointRepository.GetEndpointByPathAsync(path),
                 CacheSettings.Endpoint.Expiration);
 
             return cv?.Value;

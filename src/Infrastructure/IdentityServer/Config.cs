@@ -24,7 +24,7 @@ namespace IdentityServer
         {
             new Client
             {
-                ClientId = "client",
+                ClientId = "e2e-test-client",
 
                 // no interactive user, use the clientid/secret for authentication
                 AllowedGrantTypes = GrantTypes.ClientCredentials,

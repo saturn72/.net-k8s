@@ -33,3 +33,4 @@ packages/
 *.crt
 *.key
 *.csr
+/src/Services/EndpointQueryService/firebase.json

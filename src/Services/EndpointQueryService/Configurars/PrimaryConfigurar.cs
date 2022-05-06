@@ -15,7 +15,8 @@
         {
             new AuthConfigurar().Configure(_services);
             new CachingConfigurar().Configure(_services);
-            new ServicesConfigurar().Configure(_services, _configuration);
+            new FirebaseConfigurar().Configure(_services, _configuration);
+            new ServicesConfigurar().Configure(_services);
         }
     }
 }
