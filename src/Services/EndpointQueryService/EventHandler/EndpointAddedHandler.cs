@@ -1,6 +1,5 @@
 ﻿using EndpointQueryService.Data.Endpoints;
 using EndpointQueryService.Domain;
-using EndpointQueryService.Services;
 
 namespace EndpointQueryService.EventHandler
 {
@@ -12,7 +11,6 @@ namespace EndpointQueryService.EventHandler
             string account = j["account"],
                 name = j["name"],
                 version = j["version"];
-            var isLatest = bool.Parse(j["latest"]);
 
             var repo = services.GetRequiredService<IEndpointRepository>();
             var entry = new EndpointInfo
@@ -23,18 +21,8 @@ namespace EndpointQueryService.EventHandler
             };
 
             await repo.AddOrUpdateEndpointEntryByPath(entry);
-            if (isLatest)
-            {
-                var l = entry with { Version = Consts.Endpoint.LatestVersion };
-                await repo.AddOrUpdateEndpointEntryByPath(entry);
-            }
 
-            //set latest
-
-            //var model = new EndpointDbModel
-            //path
-            //search-tags
-            //content
+            throw new NotImplementedException("handle deletion and endpoint expiration");
         };
     }
 }

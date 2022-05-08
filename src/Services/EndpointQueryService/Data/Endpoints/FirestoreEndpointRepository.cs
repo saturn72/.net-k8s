@@ -23,8 +23,7 @@ namespace EndpointQueryService.Data.Endpoints
 
         public async Task AddOrUpdateEndpointEntryByPath(EndpointInfo info)
         {
-            if (!info.IsValid())
-                throw new ArgumentException(nameof(info));
+            if (!info.IsValid()) throw new ArgumentException(nameof(info));
 
             var path = info.Path.Replace(EndpointInfo.PathDelimiter, DocumentPathDelilmieter);
             var doc = _getCollection().Document(path);
@@ -45,9 +44,12 @@ namespace EndpointQueryService.Data.Endpoints
                 _logger.LogError("Failed to set document for endpoint: {info}", info);
         }
 
-        public Task<EndpointInfo> GetEndpointByPathAsync(string path)
+        public async Task<EndpointInfo> GetEndpointByPathAsync(string path)
         {
-            _getCollection().as
+            var doc = _getCollection().Document(path);
+            var s = await doc.GetSnapshotAsync();
+            if (!s.Exists) return null;
+
             throw new NotImplementedException();
         }
 

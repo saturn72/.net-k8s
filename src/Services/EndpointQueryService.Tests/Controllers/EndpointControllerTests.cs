@@ -40,11 +40,13 @@ namespace EndpointQueryService.Tests.Controllers
         public async Task GetAll_Forbid_OnNullTemplate()
         {
             string an = "account-name",
-                ep = "endpoint";
+                ep = "endpoint",
+                ver = "v1";
+
             var es = new Mock<IEndpointService>();
 
             var ctrl = new EndpointController(es.Object, null, null, null, null);
-            var r = await ctrl.GetAllEntries(an, ep);
+            var r = await ctrl.GetAllEntries(an, ep, ver);
             r.ShouldBeOfType<ForbidResult>();
         }
 
@@ -54,7 +56,7 @@ namespace EndpointQueryService.Tests.Controllers
             string an = "account-name",
                  ep = "endpoint",
                  t = "temlate",
-                 ver = "latest";
+                ver = "v1"; ;
 
             var es = new Mock<IEndpointService>();
 
@@ -78,14 +80,15 @@ namespace EndpointQueryService.Tests.Controllers
             ctx.Setup(c => c.User).Returns(user);
             ctrl.ControllerContext.HttpContext = ctx.Object;
 
-            var r = await ctrl.GetAllEntries(an, ep);
+            var r = await ctrl.GetAllEntries(an, ep, ver);
             r.ShouldBeOfType<ForbidResult>();
         }
         [Fact]
         public async Task GetAll_Forbid_OnRateManager_ReturnsTrue()
         {
             string an = "account-name",
-                 ep = "endpoint";
+                 ep = "endpoint",
+                ver = "v1";
 
             var es = new Mock<IEndpointService>();
 
@@ -113,14 +116,15 @@ namespace EndpointQueryService.Tests.Controllers
             var ctrl = new EndpointController(es.Object, pm.Object, rm.Object, null, null);
 
             ctrl.ControllerContext.HttpContext = ctx.Object;
-            var r = await ctrl.GetAllEntries(an, ep);
+            var r = await ctrl.GetAllEntries(an, ep, ver);
             r.ShouldBeOfType<ForbidResult>();
         }
         [Fact]
         public async Task GetAll_Forbid_GetsEntries_OnError_NoContent_DoesNotPublish()
         {
             string an = "account-name",
-                 ep = "endpoint";
+                 ep = "endpoint",
+                ver = "v1";
 
             var es = new Mock<IEndpointService>();
 
@@ -150,7 +154,7 @@ namespace EndpointQueryService.Tests.Controllers
             var ctrl = new EndpointController(es.Object, pm.Object, rm.Object, null, null);
 
             ctrl.ControllerContext.HttpContext = ctx.Object;
-            var r = await ctrl.GetAllEntries(an, ep);
+            var r = await ctrl.GetAllEntries(an, ep, ver);
             r.ShouldBeOfType<OkResult>();
         }
         [Fact]
@@ -158,6 +162,7 @@ namespace EndpointQueryService.Tests.Controllers
         {
             string an = "account-name",
                  ep = "endpoint",
+                 ver = "v1",
                  data = "data";
 
             var es = new Mock<IEndpointService>();
@@ -187,7 +192,7 @@ namespace EndpointQueryService.Tests.Controllers
             var ctrl = new EndpointController(es.Object, pm.Object, rm.Object, eb.Object, null);
 
             ctrl.ControllerContext.HttpContext = ctx.Object;
-            var r = await ctrl.GetAllEntries(an, ep);
+            var r = await ctrl.GetAllEntries(an, ep, ver);
             r.ShouldBeOfType<OkObjectResult>().Value.ShouldBe(data);
 
             eb.Verify(e => e.Publish(It.IsAny<ApiConsumptionActivityLogRecord>()), Times.Once());

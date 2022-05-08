@@ -21,6 +21,8 @@ Thumbs.db
 *.log
 [Bb]in
 [Dd]ebug*/
+[Oo]bj/
+
 *.lib
 *.sbr
 obj/
@@ -34,3 +36,4 @@ packages/
 *.key
 *.csr
 /src/Services/EndpointQueryService/firebase.json
+docker-compose.*.yml

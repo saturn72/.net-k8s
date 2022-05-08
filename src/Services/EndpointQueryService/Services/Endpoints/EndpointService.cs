@@ -37,7 +37,6 @@ namespace EndpointQueryService.Services.Endpoints
                 return;
             }
 
-
             context.Data = entries.Value.Select(d => d.Data).ToList();
         }
 

@@ -1,4 +1,5 @@
-﻿using Google.Cloud.Firestore;
+﻿using EndpointQueryService.Data.Endpoints;
+using Google.Cloud.Firestore;
 using Google.Cloud.Firestore.V1;
 
 namespace EndpointQueryService.Configurars
@@ -17,6 +18,8 @@ namespace EndpointQueryService.Configurars
             }.Build();
             var firestoreDb = FirestoreDb.Create(projectId, fireStoreClient);
             services.AddSingleton(firestoreDb);
+
+            services.AddSingleton<IEndpointRepository, FirestoreEndpointRepository>();
         }
     }
 }

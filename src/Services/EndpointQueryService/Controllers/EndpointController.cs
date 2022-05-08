@@ -12,7 +12,7 @@ namespace EndpointQueryService.Controllers
 {
     [ApiController]
     [Route("endpoint")]
-    [Authorize(Roles = "subscribed")]
+    //    [Authorize(Roles = "subscribed")]
     public class EndpointController : ControllerBase
     {
         private readonly IEndpointService _endpointService;
@@ -48,15 +48,15 @@ namespace EndpointQueryService.Controllers
         public async Task<IActionResult> GetAllEntries(
             string account,
             string endpoint,
-            [FromQuery] string? version = Consts.Endpoint.LatestVersion,
+            string version,
             [FromQuery] int offSet = 0,
             [FromQuery] int pageSize = 100)
         {
             var path = $"{account}/{endpoint}/{version}";
             var t = await _endpointService.GetEndpointInfoByPath(path);
 
-            if (t == default)
-                return Forbid();
+            if (t == default) return Forbid();
+
             var subject = User.Subject();
             var context = new GetEntriesContext
             {

@@ -11,8 +11,6 @@ namespace EndpointQueryService.Configurars
             {
                 options.UseInMemory(DefaultCachingProviderName);
             });
-            services.AddSingleton(sp =>
-            sp.GetRequiredService<IEasyCachingProviderFactory>().GetCachingProvider(DefaultCachingProviderName));
         }
     }
 }

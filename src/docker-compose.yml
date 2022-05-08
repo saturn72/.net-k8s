@@ -12,6 +12,9 @@ services:
     - /var/run/docker.sock:/var/run/docker.sock
     - ./traefik.yml:/etc/traefik/traefik.yml
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
   identity:
     image: ${DOCKER_REGISTRY-}identity
     container_name: identity
@@ -29,19 +32,11 @@ services:
     build:
       context: .
       dockerfile: Infrastructure/IdentityServer/Dockerfile
-
-  #api:
-  #  image: ${DOCKER_REGISTRY-}api
-  #  ports:
-  #  - "5020:80"
-  #  - "5021:443"
-  #  labels:
-  #    - "traefik.enable=true"
-  #    - "traefik.http.routers.api.rule=Host(`api.localhost`)"
-  #    - "traefik.http.routers.api.entrypoints=web"
-  #    - "traefik.http.routers.api.service=api"
-  #    - "traefik.http.routers.api.tls=true"
-  #    - "traefik.http.services.api.loadbalancer.server.port=5020"
-  #  build:
-  #    context: .
-  #    dockerfile: Services/API/Dockerfile
+  
+  endpoint-query:
+    build:
+      context: .
+      dockerfile: Services/EndpointQueryService/Dockerfile
+    depends_on:
+      - identity
+      - rabbitmq
