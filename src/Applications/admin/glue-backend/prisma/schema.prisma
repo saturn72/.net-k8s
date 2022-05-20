@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String                  @id @default(uuid())
+  branches          Branch[]
+  comment           String?                 @db.TinyText
+  createdAt         DateTime                @default(now())
+  name              String                  @unique(map: "Account_name_key") @db.VarChar(255)
+  updatedAt         DateTime?
+  state             String                  @db.TinyText
+  agentApps         AccountAgentAppConfig[]
+  oidcProviderId    String?
+  oidcProvider      OidcProvider?
+  programmingTool   ProgrammingTool?        @relation(fields: [programmingToolId], references: [id])
+  programmingToolId String?
+}
+
+model AvosetGoOnline {
+  id              String            @id @default(uuid())
+  comment         String?           @db.TinyText
+  createdAt       DateTime          @default(now())
+  healthcheckUrl  String?           @db.TinyText
+  name            String            @unique @db.VarChar(255)
+  updatedAt       DateTime?
+  url             String            @db.TinyText
+  websocketUri    String?           @db.TinyText
+  programmingTool ProgrammingTool[]
+}
+
+model OidcProvider {
+  id           String  @id @default(uuid())
+  accountUuid  String  @db.TinyText
+  clientId     String? @db.TinyText
+  clientSecret String? @db.TinyText
+  displayName  String  @db.TinyText
+  provider     String? @db.TinyText
+  issuer       String? @db.TinyText
+  rawInfo      Json?
+  scheme       String? @db.TinyText
+  account      Account @relation(fields: [accountId], references: [id], map: "OidcProvider_accountId_fkey")
+  accountId    String  @unique
+}
+
+model AccountAgentAppConfig {
+  platform       String
+  accountId      String
+  Account        Account      @relation(fields: [accountId], references: [id])
+  agentAppId     String
+  agentApp       AgentApp     @relation(fields: [agentAppId], references: [id])
+  agentBackendId String
+  agentBackend   AgentBackend @relation(fields: [agentBackendId], references: [id])
+
+  @@id([accountId, agentAppId, agentBackendId, platform])
+}
+
+model BranchAgentAppConfig {
+  platform       String
+  branchId       String
+  Branch         Branch       @relation(fields: [branchId], references: [id])
+  agentAppId     String
+  agentApp       AgentApp     @relation(fields: [agentAppId], references: [id])
+  agentBackendId String
+  agentBackend   AgentBackend @relation(fields: [agentBackendId], references: [id])
+
+  @@id([branchId, agentAppId, agentBackendId, platform])
+}
+
+model Branch {
+  id          String                 @id @default(uuid())
+  account     Account?               @relation(fields: [accountId], references: [id])
+  accountId   String
+  branchId    String
+  description String?
+  name        String
+  agentApps   BranchAgentAppConfig[]
+}
+
+model AgentApp {
+  id                    String                  @id @default(uuid())
+  alias                 String?                 @db.TinyText
+  comment               String?                 @db.TinyText
+  createdAt             DateTime                @default(now())
+  downloadableName      String?                 @db.TinyText
+  mediaInfoIds          Json?
+  platform              String?                 @db.TinyText
+  published             Boolean                 @default(false)
+  type                  String?                 @db.TinyText
+  updatedAt             DateTime?
+  version               String?                 @db.TinyText
+  accountAgentAppConfig AccountAgentAppConfig[]
+  branchAgentAppConfig  BranchAgentAppConfig[]
+}
+
+model AgentBackend {
+  id                    String                  @id @default(uuid())
+  alias                 String                  @db.TinyText
+  comment               String?                 @db.TinyText
+  discoverUri           String                  @db.TinyText
+  healthcheckUrl        String                  @db.TinyText
+  identityProvider      IdentityProvider        @relation(fields: [identityProviderId], references: [id])
+  identityProviderId    String
+  url                   String                  @db.TinyText
+  websocketUri          String?                 @db.TinyText
+  accountAgentAppConfig AccountAgentAppConfig[]
+  branchAgentAppConfig  BranchAgentAppConfig[]
+  tenants               Tenant[]
+}
+
+model MessageBus {
+  id        String   @id @default(uuid())
+  comment   String?
+  createdAt DateTime @default(now())
+  icon      String?  @db.TinyText
+  name      String   @unique @db.VarChar(255)
+  options   Json?
+  type      String   @db.TinyText
+  tenants   Tenant[]
+}
+
+model Tenant {
+  id                String             @id @default(uuid())
+  color             String?            @db.TinyText
+  comment           String?
+  createdAt         DateTime           @default(now())
+  icon              String?            @db.TinyText
+  name              String             @unique @db.VarChar(255)
+  prefix            String             @db.TinyText
+  state             String             @db.TinyText
+  messageBus        MessageBus         @relation(fields: [messageBusId], references: [id])
+  messageBusId      String
+  identityProviders IdentityProvider[]
+  AgentBackends     AgentBackend[]
+}
+
+model IdentityProvider {
+  id             String         @id @default(uuid())
+  alias          String?        @db.TinyText
+  comment        String?        @db.TinyText
+  healthcheckUrl String?        @db.TinyText
+  url            String?        @db.TinyText
+  tenants        Tenant[]
+  AgentBackends  AgentBackend[]
+}
+
+model MediaInfo {
+  id            String  @id @default(uuid())
+  bytes         Bytes
+  encoding      String  @db.TinyText
+  name          String  @db.TinyText
+  mime          String  @db.TinyText
+  provider      String? @db.TinyText
+  providerPath  String? @db.TinyText
+  providerSpace String? @db.TinyText
+}
+
+model ProgrammingTool {
+  id               String          @id @default(uuid())
+  name             String          @db.TinyText
+  loginCallback    String          @db.TinyText
+  url              String          @db.TinyText
+  comment          String?         @db.TinyText
+  account          Account[]
+  avosetGoOnline   AvosetGoOnline? @relation(fields: [avosetGoOnlineId], references: [id])
+  avosetGoOnlineId String?
+}

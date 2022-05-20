@@ -4,7 +4,7 @@ namespace EndpointQueryService.Services.Endpoints
 {
     public interface IEndpointService
     {
-        Task GetEntriesPage(GetEntriesContext context);
+        Task GetEntries(GetEntriesContext context);
         Task<EndpointInfo> GetEndpointInfoByPath(string path);
     }
 }

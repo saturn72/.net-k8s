@@ -2,9 +2,9 @@
 {
     public class PermissionManager : IPermissionManager
     {
-        public Task<bool> UserIsPermittedForTemplateAction(string userId, ActionContext context)
+        public Task<bool> UserIsPermittedForEndpointAction(ActionContext context)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(true);
         }
     }
 }

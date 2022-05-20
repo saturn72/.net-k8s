@@ -22,6 +22,10 @@ Thumbs.db
 [Bb]in
 [Dd]ebug*/
 [Oo]bj/
+[Oo]ut/
+[Tt]mp/
+node_modules/
+
 
 *.lib
 *.sbr

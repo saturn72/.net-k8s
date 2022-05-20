@@ -5,8 +5,8 @@ namespace EndpointQueryService.Data.Endpoints
 {
     public interface IEndpointRepository
     {
-        Task<EndpointInfo> GetEndpointByPathAsync(string path);
-        Task<IEnumerable<EndpointEntry>> GetEntries(GetEntriesContext context);
+        Task<EndpointInfo> GetEndpointByPath(string path);
+        Task<IEnumerable<EndpointEntry>> GetEntriesPage(GetEntriesContext context);
         Task AddOrUpdateEndpointEntryByPath(EndpointInfo info);
     }
 }

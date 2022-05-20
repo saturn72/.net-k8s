@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Shouldly;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,12 +26,15 @@ namespace EndpointQueryService.Tests.Services.Endpoints
             {
                 Endpoint = new EndpointInfo
                 {
-                    Account = "acc",
-                    Name = "name",
-                    Version = "ver"
+                    Meta = new EndpointMeta
+                    {
+                        Account = "acc",
+                        Name = "name",
+                        Version = "ver"
+                    },
                 }
             };
-            await srv.GetEntriesPage(ctx);
+            await srv.GetEntries(ctx);
             ctx.IsError.ShouldBeTrue();
         }
 
@@ -40,27 +42,29 @@ namespace EndpointQueryService.Tests.Services.Endpoints
         public async Task GetEntries_ReturnsData()
         {
             var log = new Mock<ILogger<EndpointService>>();
-            var ch = new Mock<IEasyCachingProvider>();
-            var exp = new[] { "aa", "b", "c", "d" };
-            var data = new CacheValue<IEnumerable<EndpointEntry>>(exp.Select(s => new EndpointEntry { Data = s }).ToArray(), true);
+            var cache = new Mock<IEasyCachingProvider>();
+            var exp = new List<object> { "aa", "b", "c", "d" };
+            var data = new CacheValue<List<object>>(exp, true);
 
-            ch.Setup(r => r.GetAsync(
+            cache.Setup(r => r.GetAsync(
                 It.IsAny<string>(),
-                It.IsAny<Func<Task<IEnumerable<EndpointEntry>>>>(),
+                It.IsAny<Func<Task<List<object>>>>(),
                 It.IsAny<TimeSpan>())).ReturnsAsync(data);
 
-
-            var srv = new EndpointService(ch.Object, null, log.Object);
+            var srv = new EndpointService(cache.Object, null, log.Object);
             var ctx = new GetEntriesContext
             {
                 Endpoint = new EndpointInfo
                 {
-                    Account = "acc",
-                    Name = "name",
-                    Version = "ver"
+                    Meta = new EndpointMeta
+                    {
+                        Account = "acc",
+                        Name = "name",
+                        Version = "ver"
+                    }
                 }
             };
-            await srv.GetEntriesPage(ctx);
+            await srv.GetEntries(ctx);
             ctx.IsError.ShouldBeFalse();
             var l = ctx.Data.ShouldBeOfType<List<object>>();
             l.ShouldAllBe(x => exp.Contains(x));
@@ -77,7 +81,7 @@ namespace EndpointQueryService.Tests.Services.Endpoints
             ch.Setup(r => r.GetAsync(
                 It.IsAny<string>(),
                 It.IsAny<Func<Task<EndpointInfo>>>(),
-                It.IsAny<TimeSpan>())).ReturnsAsync( data);
+                It.IsAny<TimeSpan>())).ReturnsAsync(data);
 
 
             var srv = new EndpointService(ch.Object, null, log.Object);
@@ -91,7 +95,6 @@ namespace EndpointQueryService.Tests.Services.Endpoints
             var log = new Mock<ILogger<EndpointService>>();
             var ch = new Mock<IEasyCachingProvider>();
             var ei = new EndpointInfo();
-            var data = new CacheValue<EndpointInfo>(ei, false);
 
             var srv = new EndpointService(ch.Object, null, log.Object);
             var res = await srv.GetEndpointInfoByPath("p");

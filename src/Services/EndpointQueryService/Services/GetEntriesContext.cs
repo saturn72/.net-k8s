@@ -10,6 +10,9 @@ namespace EndpointQueryService.Services
         private int _offSet;
         private int _pageSizeRequested = 100;
         private int _pageSize = 100;
+        private IEnumerable<string>? _ids;
+        private IEnumerable<KeyValuePair<string, string>>? _filter;
+
         public int OffSetRequested
         {
             get => _offSetRequested;
@@ -44,5 +47,26 @@ namespace EndpointQueryService.Services
             }
         }
         public int PageSize => _pageSize;
+        public IEnumerable<string>? Ids
+        {
+            get => _ids;
+            init
+            {
+                if (_filter != null)
+                    throw new InvalidOperationException($"Filter cannot be set when {nameof(Filter)} initialized");
+
+                _ids = value;
+            }
+        }
+        public IEnumerable<KeyValuePair<string, string>>? Filter
+        {
+            get => _filter;
+            init
+            {
+                if (_ids != null)
+                    throw new InvalidOperationException($"Filter cannot be set when {nameof(Ids)} initialized");
+                _filter = value;
+            }
+        }
     }
 }

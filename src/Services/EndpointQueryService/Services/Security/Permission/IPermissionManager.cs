@@ -2,6 +2,6 @@
 {
     public interface IPermissionManager
     {
-        Task<bool> UserIsPermittedForTemplateAction(string userId, ActionContext context);
+        Task<bool> UserIsPermittedForEndpointAction(ActionContext context);
     }
 }

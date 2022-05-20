@@ -7,5 +7,6 @@
         public string? Name { get; init; }
         public string? Path { get; init; }
         public string? Version { get; init; }
+        public string? SubVersion { get; init; }
     }
 }

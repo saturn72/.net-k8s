@@ -1,5 +1,6 @@
 ﻿using EndpointQueryService.Data.Endpoints;
 using EndpointQueryService.Domain;
+using Microsoft.AspNetCore.Authentication;
 
 namespace EndpointQueryService.EventHandler
 {
@@ -8,16 +9,19 @@ namespace EndpointQueryService.EventHandler
         public Func<IServiceProvider, object, Task> Handle => async (services, @event) =>
         {
             var j = @event as IDictionary<string, string>;
-            string account = j["account"],
-                name = j["name"],
-                version = j["version"];
 
             var repo = services.GetRequiredService<IEndpointRepository>();
+            var clock = services.GetService<ISystemClock>();
             var entry = new EndpointInfo
             {
-                Account = account,
-                Name = name,
-                Version = version,
+                Meta = new EndpointMeta
+                {
+                    PublishedOnUtc = clock.UtcNow.UtcDateTime,
+                    Account = j["account"],
+                    Name = j["name"],
+                    Version = j["version"],
+                    SubVersion = j["subversion"]
+                }
             };
 
             await repo.AddOrUpdateEndpointEntryByPath(entry);

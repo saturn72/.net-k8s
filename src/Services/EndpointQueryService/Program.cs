@@ -1,21 +1,20 @@
-using EndpointQueryService.Configurars;
 
-var builder = WebApplication.CreateBuilder(args);
-var c = new PrimaryConfigurar(builder);
-c.Configure();
+namespace EndpointQueryService
+{
+    public partial class Program
+    {
 
-// Add services to the container.
+        public static int Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+            return 0;
+        }
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+                   Host.CreateDefaultBuilder(args)
+                       .ConfigureWebHostDefaults(webBuilder =>
+                       {
+                           webBuilder.UseStartup<Startup>();
+                       });
 
-builder.Services.AddControllers();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+    }
+}

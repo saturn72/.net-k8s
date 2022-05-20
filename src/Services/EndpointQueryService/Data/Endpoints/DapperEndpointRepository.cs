@@ -13,7 +13,7 @@ namespace EndpointQueryService.Data.Endpoints
         {
             _connectionString = connectionString; ;
         }
-        public async Task<IEnumerable<EndpointEntry>> GetEntries(GetEntriesContext context)
+        public async Task<IEnumerable<EndpointEntry>> GetEntriesPage(GetEntriesContext context)
         {
             var sql = SqlScripts.GetEntriesByVersion(context);
 
@@ -21,7 +21,7 @@ namespace EndpointQueryService.Data.Endpoints
             return await con.QueryAsync<EndpointEntry>(sql);
         }
 
-        public async Task<EndpointInfo> GetEndpointByPathAsync(string path)
+        public async Task<EndpointInfo> GetEndpointByPath(string path)
         {
             using var con = new SqlConnection(_connectionString);
             var d = await con.QuerySingleOrDefaultAsync<EndpointDbModel>(SqlScripts.GetTemplateByPath, new { Path = path });
@@ -31,9 +31,13 @@ namespace EndpointQueryService.Data.Endpoints
     new()
     {
         Id = model.Id,
-        Account = model.Account,
-        Name = model.Name,
-        Version = model.Version,
+        Meta = new EndpointMeta
+        {
+            Account = model.Account,
+            Name = model.Name,
+            Version = model.Version,
+            SubVersion = model.SubVersion,
+        }
     };
 
         public Task AddOrUpdateEndpointEntryByPath(EndpointInfo info)
@@ -53,7 +57,7 @@ namespace EndpointQueryService.Data.Endpoints
             internal static string GetEntriesByVersion(GetEntriesContext context)
             {
                 var where = $"[{nameof(context.Endpoint.Id)}] = {context.Endpoint.Id} AND " +
-                    $"[Version] = {context.Endpoint.Version}";
+                    $"[Version] = {context.Endpoint.Meta.Version}";
                 return $"{SelectFrom} WHERE {where} " +
                     //$" ORDER BY {orderBy} {sortOrder} " +
                     $"OFFSET {context.OffSet} ROWS " +
@@ -71,8 +75,8 @@ namespace EndpointQueryService.Data.Endpoints
                         "END " +
                     "ELSE " +
                         "BEGIN" +
-                            $"INSERT INTO {Table} ([{nameof(EndpointInfo.Account)}], [{nameof(EndpointInfo.Name)}], [{nameof(EndpointInfo.Version)}]) " +
-                            $"VALUES({info.Account}, {info.Name}, {info.Version})" +
+                            $"INSERT INTO {Table} ([{nameof(EndpointInfo.Meta.Account)}], [{nameof(EndpointInfo.Meta.Name)}], [{nameof(EndpointInfo.Meta.Version)}]) " +
+                            $"VALUES({info.Meta.Account}, {info.Meta.Name}, {info.Meta.Version})" +
                         "END " +
                 "COMMIT TRAN";
             }

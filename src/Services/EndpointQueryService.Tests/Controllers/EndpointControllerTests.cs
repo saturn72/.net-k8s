@@ -29,7 +29,7 @@ namespace EndpointQueryService.Tests.Controllers
             var allAtts = ac.GetCustomAttributes(true);
             var authAtts = allAtts.Where(a => a.GetType() == typeof(AuthorizeAttribute)).Select(s => s as AuthorizeAttribute);
             authAtts.Count().ShouldBe(1);
-            authAtts.First()?.Roles.ShouldBe("subscribed");
+            authAtts.First()?.Roles.ShouldBe("registered");
 
             var routeAtts = allAtts.Where(a => a.GetType() == typeof(RouteAttribute)).Select(x => x as RouteAttribute);
             routeAtts.Count().ShouldBe(1);
@@ -46,7 +46,7 @@ namespace EndpointQueryService.Tests.Controllers
             var es = new Mock<IEndpointService>();
 
             var ctrl = new EndpointController(es.Object, null, null, null, null);
-            var r = await ctrl.GetAllEntries(an, ep, ver);
+            var r = await ctrl.GetEndpointMeta(an, ep, ver);
             r.ShouldBeOfType<ForbidResult>();
         }
 
@@ -62,12 +62,17 @@ namespace EndpointQueryService.Tests.Controllers
 
             var template = new EndpointInfo
             {
+                Meta = new EndpointMeta
+                {
+                    Account = an,
+                    Name = ep,
+                    Version = ver
+                }
             };
             es.Setup(e => e.GetEndpointInfoByPath(It.IsAny<string>())).ReturnsAsync(template);
 
             var pm = new Mock<IPermissionManager>();
-            pm.Setup(p => p.UserIsPermittedForTemplateAction(
-                It.IsAny<string>(),
+            pm.Setup(p => p.UserIsPermittedForEndpointAction(
                 It.IsAny<GetEntriesContext>())).ReturnsAsync(false);
             var ci = new[]
             {
@@ -80,7 +85,7 @@ namespace EndpointQueryService.Tests.Controllers
             ctx.Setup(c => c.User).Returns(user);
             ctrl.ControllerContext.HttpContext = ctx.Object;
 
-            var r = await ctrl.GetAllEntries(an, ep, ver);
+            var r = await ctrl.GetEndpointMeta(an, ep, ver);
             r.ShouldBeOfType<ForbidResult>();
         }
         [Fact]
@@ -94,12 +99,17 @@ namespace EndpointQueryService.Tests.Controllers
 
             var template = new EndpointInfo
             {
+                Meta = new EndpointMeta
+                {
+                    Account = an,
+                    Name = ep,
+                    Version = ver
+                }
             };
             es.Setup(e => e.GetEndpointInfoByPath(It.IsAny<string>())).ReturnsAsync(template);
 
             var pm = new Mock<IPermissionManager>();
-            pm.Setup(p => p.UserIsPermittedForTemplateAction(
-                It.IsAny<string>(),
+            pm.Setup(p => p.UserIsPermittedForEndpointAction(
                 It.IsAny<GetEntriesContext>())).ReturnsAsync(true);
 
             var rm = new Mock<IRateManager>();
@@ -116,7 +126,7 @@ namespace EndpointQueryService.Tests.Controllers
             var ctrl = new EndpointController(es.Object, pm.Object, rm.Object, null, null);
 
             ctrl.ControllerContext.HttpContext = ctx.Object;
-            var r = await ctrl.GetAllEntries(an, ep, ver);
+            var r = await ctrl.GetEndpointMeta(an, ep, ver);
             r.ShouldBeOfType<ForbidResult>();
         }
         [Fact]
@@ -128,16 +138,20 @@ namespace EndpointQueryService.Tests.Controllers
 
             var es = new Mock<IEndpointService>();
 
-            var template = new EndpointInfo
+            var endp = new EndpointInfo
             {
+                Meta = new EndpointMeta
+                {
+                    Account = an,
+                    Name = ep,
+                    Version = ver
+                }
             };
-            es.Setup(e => e.GetEndpointInfoByPath(It.IsAny<string>())).ReturnsAsync(template);
-            es.Setup(e => e.GetEntriesPage(It.IsAny<GetEntriesContext>())).Callback<GetEntriesContext>(ctx => ctx.Error = "err");
+            es.Setup(e => e.GetEndpointInfoByPath(It.IsAny<string>())).ReturnsAsync(endp);
+            es.Setup(e => e.GetEntries(It.IsAny<GetEntriesContext>())).Callback<GetEntriesContext>(ctx => ctx.Error = "err");
 
             var pm = new Mock<IPermissionManager>();
-            pm.Setup(p => p.UserIsPermittedForTemplateAction(
-                It.IsAny<string>(),
-                It.IsAny<GetEntriesContext>())).ReturnsAsync(true);
+            pm.Setup(p => p.UserIsPermittedForEndpointAction(It.IsAny<GetEntriesContext>())).ReturnsAsync(true);
 
             var rm = new Mock<IRateManager>();
             rm.Setup(r => r.UserExceededAccessToAccountEndpointVersionAction(It.IsAny<ActionContext>())).ReturnsAsync(false);
@@ -154,8 +168,8 @@ namespace EndpointQueryService.Tests.Controllers
             var ctrl = new EndpointController(es.Object, pm.Object, rm.Object, null, null);
 
             ctrl.ControllerContext.HttpContext = ctx.Object;
-            var r = await ctrl.GetAllEntries(an, ep, ver);
-            r.ShouldBeOfType<OkResult>();
+            var r = await ctrl.GetEndpointMeta(an, ep, ver);
+            r.ShouldBeOfType<OkObjectResult>();
         }
         [Fact]
         public async Task GetAll_Forbid_GetsEntries_Success_OkResult_Publishes()
@@ -167,15 +181,19 @@ namespace EndpointQueryService.Tests.Controllers
 
             var es = new Mock<IEndpointService>();
 
-            var template = new EndpointInfo
+            var enp = new EndpointInfo
             {
+                Meta = new EndpointMeta
+                {
+                    Account = an,
+                    Name = ep,
+                    Version = ver
+                }
             };
-            es.Setup(e => e.GetEndpointInfoByPath(It.IsAny<string>())).ReturnsAsync(template);
-            es.Setup(e => e.GetEntriesPage(It.IsAny<GetEntriesContext>())).Callback<GetEntriesContext>(ctx => ctx.Data = data);
+            es.Setup(e => e.GetEndpointInfoByPath(It.IsAny<string>())).ReturnsAsync(enp);
+            es.Setup(e => e.GetEntries(It.IsAny<GetEntriesContext>())).Callback<GetEntriesContext>(ctx => ctx.Data = data);
             var pm = new Mock<IPermissionManager>();
-            pm.Setup(p => p.UserIsPermittedForTemplateAction(
-                It.IsAny<string>(),
-                It.IsAny<GetEntriesContext>())).ReturnsAsync(true);
+            pm.Setup(p => p.UserIsPermittedForEndpointAction(It.IsAny<GetEntriesContext>())).ReturnsAsync(true);
 
             var rm = new Mock<IRateManager>();
             rm.Setup(r => r.UserExceededAccessToAccountEndpointVersionAction(It.IsAny<ActionContext>())).ReturnsAsync(false);
@@ -192,7 +210,7 @@ namespace EndpointQueryService.Tests.Controllers
             var ctrl = new EndpointController(es.Object, pm.Object, rm.Object, eb.Object, null);
 
             ctrl.ControllerContext.HttpContext = ctx.Object;
-            var r = await ctrl.GetAllEntries(an, ep, ver);
+            var r = await ctrl.GetEndpointMeta(an, ep, ver);
             r.ShouldBeOfType<OkObjectResult>().Value.ShouldBe(data);
 
             eb.Verify(e => e.Publish(It.IsAny<ApiConsumptionActivityLogRecord>()), Times.Once());

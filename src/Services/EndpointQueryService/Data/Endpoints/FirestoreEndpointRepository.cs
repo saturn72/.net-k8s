@@ -9,7 +9,7 @@ namespace EndpointQueryService.Data.Endpoints
         private const string DocumentPathDelilmieter = "-";
 
         private readonly FirestoreDb _db;
-        private readonly Func<CollectionReference> _getCollection;
+        private readonly Func<string, DocumentReference> _getDocument;
         private readonly ILogger<FirestoreEndpointRepository> _logger;
 
         public FirestoreEndpointRepository(
@@ -17,7 +17,7 @@ namespace EndpointQueryService.Data.Endpoints
             ILogger<FirestoreEndpointRepository> logger)
         {
             _db = db;
-            _getCollection = () => _db.Collection("endpoints");
+            _getDocument = (path) => _db.Collection("endpoints").Document(path);
             _logger = logger;
         }
 
@@ -26,49 +26,33 @@ namespace EndpointQueryService.Data.Endpoints
             if (!info.IsValid()) throw new ArgumentException(nameof(info));
 
             var path = info.Path.Replace(EndpointInfo.PathDelimiter, DocumentPathDelilmieter);
-            var doc = _getCollection().Document(path);
+            var doc = _getDocument(path);
             var dSnap = await doc.GetSnapshotAsync();
 
-            var d = new
-            {
-                idProperty = info.IdProperty,
-                searchableBy = info.SearchableBy.ToArray(),
-                account = info.Account,
-                name = info.Name,
-                version = info.Version,
-                subVersion = info.SubVersion,
-            };
-            var wr = await doc.SetAsync(d);
-
+            var wr = await doc.SetAsync(info);
+            
             if (dSnap.UpdateTime == wr.UpdateTime)
                 _logger.LogError("Failed to set document for endpoint: {info}", info);
         }
 
-        public async Task<EndpointInfo> GetEndpointByPathAsync(string path)
+        public async Task<EndpointInfo> GetEndpointByPath(string path)
         {
-            var doc = _getCollection().Document(path);
+            var doc = _getDocument(path);
             var s = await doc.GetSnapshotAsync();
             if (!s.Exists) return null;
 
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<EndpointEntry>> GetEntries(GetEntriesContext context)
+        public Task<IEnumerable<EndpointEntry>> GetEntriesPage(GetEntriesContext context)
         {
             throw new NotImplementedException();
         }
+        public Task<IEnumerable<EndpointEntry>> GetEntriesById(string path, IEnumerable<string> ids)
+        {
+            var doc = _getDocument(path);
 
-        private FirestoreModel ToFirestoreModel(EndpointInfo info)
-        {
             throw new NotImplementedException();
-        }
-        private EndpointInfo FromFirestoreModel(FirestoreModel model)
-        {
-            throw new NotImplementedException();
-        }
-        internal class FirestoreModel
-        {
-
         }
     }
 }
