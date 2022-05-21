@@ -4,7 +4,7 @@ see: [https://docs.microsoft.com/en-us/azure/architecture/patterns/index-table](
 
 To optimize data fetching, endpoints are indexed by the following "rules"
 
-|index|pointer|parameters|
+| index | pointer | parameters |
 |=====|=======|==========|
 | `/{account}/{name}{version}`                                          | endpoint info (meta)                                      |                                   |
 | `/{account}/{name}{version}?page=<page_number>?meta=<include_data>`   | endpoint entires page.                                    |
