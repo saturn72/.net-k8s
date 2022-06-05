@@ -5,14 +5,13 @@ using EndpointQueryService.Services.Endpoints;
 using EndpointQueryService.Services.Events;
 using EndpointQueryService.Services.Rate;
 using EndpointQueryService.Services.Security.Permission;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace EndpointQueryService.Controllers
 {
     [ApiController]
-    [Route("endpoint")]
+    [Route("endpoint/{account}/{endpoint}/{version}")]
     //[Authorize(Roles = "registered")]
     public class EndpointController : ControllerBase
     {
@@ -37,7 +36,7 @@ namespace EndpointQueryService.Controllers
             _logger = logger;
         }
 
-        [HttpGet("_meta/{account}/{endpoint}/{version}")]
+        [HttpGet]
         public async Task<IActionResult> GetEndpointMeta(
             string account,
             string endpoint,
@@ -75,45 +74,43 @@ namespace EndpointQueryService.Controllers
         /// <param name="account">Account name</param>
         /// <param name="endpoint">Endpoint name</param>
         /// <param name="version">Endpoint version name</param>
-        /// <param name="offSet">Offset value. normalized to 100 intervals</param>
-        /// <param name="pageSize">Page size value. normalized to 100 intervals. max value = 1000</param>
+        /// <param name="page">Entries page index (prepopulated on endpoint creation/modification)</param>
+        /// <param name="meta">Should include endpoint meta on response</param>
         /// <returns></returns>
-        [HttpGet("{account}/{endpoint}/{version}")]
+        [HttpGet("/page/{page}")]
         public async Task<IActionResult> GetAllEntries(
             string account,
             string endpoint,
             string version,
-            [FromQuery] IEnumerable<string>? id,
-            [FromQuery] int offSet = 0,
-            [FromQuery] int pageSize = 100)
+            int page = 1,
+            [FromQuery] bool meta = false)
         {
             var path = $"{account}/{endpoint}/{version}";
             var info = await _endpointService.GetEndpointInfoByPath(path);
 
             if (info == default) return Forbid();
 
-            var filter = BuildFilter(info, Request.Query);
-            var ids = BuildIds(id);
+            //var filter = BuildFilter(info, Request.Query);
+            //var ids = BuildIds(id);
 
             //filter cannot coexist with id request
-            if (ids?.Any() == true && filter != default)
-                return BadRequest();
+            //if (ids?.Any() == true && filter != default)
+            //    return BadRequest();
 
             var context = new GetEntriesContext
             {
                 Endpoint = info,
-                OffSetRequested = offSet,
-                PageSizeRequested = pageSize,
+                PageNumberRequested = page,
                 UserId = User.Subject(),
-                Ids = ids,
-                Filter = filter
+                //Ids = ids,
+                //Filter = filter
             };
 
             if (!await _permissionManager.UserIsPermittedForEndpointAction(context) ||
                 await _rateManager.UserExceededAccessToAccountEndpointVersionAction(context))
                 return Forbid();
 
-            await _endpointService.GetEntries(context);
+            await _endpointService.GetEndpointPage(context);
 
             if (context.IsError)
                 return Ok();
@@ -127,7 +124,18 @@ namespace EndpointQueryService.Controllers
             };
             _ = _eventBus.Publish(a);
             _ = _rateManager.IncrementAccessToAccountEndpointVersionAction(context);
-            return Ok(context.Data);
+
+            if (!meta)
+                return Ok(context.Data);
+
+            var content = new
+            {
+                context.Endpoint.Meta.TotalPages,
+                context.PageSize,
+                PageNumber = context.PageNumberReturned,
+                context.Data,
+            };
+            return Ok(content);
         }
 
         private static IEnumerable<string>? BuildIds(IEnumerable<string>? requestedIds)

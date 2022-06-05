@@ -10,6 +10,7 @@
         public string Account { get; init; }
         public string Version { get; init; }
         public string SubVersion { get; init; }
+        public int TotalPages { get; init; }
     }
     public record EndpointInfo : IEntity<int>
     {

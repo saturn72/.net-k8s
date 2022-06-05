@@ -9,7 +9,7 @@ namespace EndpointQueryService.Tests.Services.Endpoints
         [Fact]
         public void Const_Endpoint_Actions_AllFields()
         {
-            Consts.Endpoint.Actions.GetAll.ShouldBe("get-all");
+            Consts.Endpoint.Actions.GetPage.ShouldBe("get-all");
             Consts.Endpoint.Actions.Meta.ShouldBe("meta");
         }
     }

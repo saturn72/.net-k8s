@@ -148,7 +148,7 @@ namespace EndpointQueryService.Tests.Controllers
                 }
             };
             es.Setup(e => e.GetEndpointInfoByPath(It.IsAny<string>())).ReturnsAsync(endp);
-            es.Setup(e => e.GetEntries(It.IsAny<GetEntriesContext>())).Callback<GetEntriesContext>(ctx => ctx.Error = "err");
+            es.Setup(e => e.GetEndpointPage(It.IsAny<GetEntriesContext>())).Callback<GetEntriesContext>(ctx => ctx.Error = "err");
 
             var pm = new Mock<IPermissionManager>();
             pm.Setup(p => p.UserIsPermittedForEndpointAction(It.IsAny<GetEntriesContext>())).ReturnsAsync(true);
@@ -191,7 +191,7 @@ namespace EndpointQueryService.Tests.Controllers
                 }
             };
             es.Setup(e => e.GetEndpointInfoByPath(It.IsAny<string>())).ReturnsAsync(enp);
-            es.Setup(e => e.GetEntries(It.IsAny<GetEntriesContext>())).Callback<GetEntriesContext>(ctx => ctx.Data = data);
+            es.Setup(e => e.GetEndpointPage(It.IsAny<GetEntriesContext>())).Callback<GetEntriesContext>(ctx => ctx.Data = data);
             var pm = new Mock<IPermissionManager>();
             pm.Setup(p => p.UserIsPermittedForEndpointAction(It.IsAny<GetEntriesContext>())).ReturnsAsync(true);
 

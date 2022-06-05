@@ -20,61 +20,74 @@ namespace EndpointQueryService.Services.Endpoints
             _logger = logger;
         }
 
-        public async Task GetEntries(GetEntriesContext context)
+        public async Task GetEndpointPage(GetEntriesContext context)
         {
-            _logger.LogDebug(nameof(GetEntries));
-            if (context.Ids?.Any() == true)
-            {
-                await GetEntriesByIds(context);
-            }
+            _logger.LogDebug(nameof(GetEndpointPage));
+            await GetEntriesPageInternal(context);
+            //if (context.Ids?.Any() == true)
+            //{
+            //    await GetEntriesByIds(context);
+            //}
 
-            else if (context.Filter?.Any() == true)
+            //else if (context.Filter?.Any() == true)
+            //{
+            //    await GetFilteredEntries(context);
+            //}
+            //else
+            //{
+            //}
+        }
+        //protected async Task GetFilteredEntries(GetEntriesContext context)
+        //{
+
+        //    throw new NotImplementedException();
+        //}
+        //protected async Task GetEntriesByIds(GetEntriesContext context)
+        //{
+        //    var allIdEntries = await _cache.GetByPrefixAsync<object>(CacheSettings.Endpoint.ByIdPrefix(context));
+
+        //    var toFetch = allIdEntries.Where(kvp => !context.Ids.Contains(kvp.Key));
+
+        //    //in case all entries already in cache
+        //    if (!toFetch.Any())
+        //    {
+        //        context.Data = allIdEntries.Select(x => x.Value.Value);
+        //        return;
+        //    }
+        //    _endpointRepository.GetEntriesPage(context);
+        //    for (int i = 0; i < allIdEntries.Count; i++)
+        //    {
+
+        //    }
+        //    if (allIdEntries == null)
+        //        var allKeys = context.Ids.Select(id => CacheSettings.Endpoint.BuildGetEntryByIdKey(context, id)).ToArray();
+        //    var toFetch = new List<string>();
+        //    var data = new List<object>();
+
+        //    for (int i = 0; i < allKeys.Count(); i++)
+        //    {
+
+        //        var = await _cache.GetAsync<object>(CacheSettings.Endpoint.Prefix);
+
+        //    }
+        //    var listRes = new List<object>();
+        //    throw new NotImplementedException();
+        //}
+        protected async Task GetEntriesPageInternal(GetEntriesContext context)
+        {
+            if (context.PageNumberRequested <= 0)
             {
-                await GetFilteredEntries(context);
+                context.PageNumberReturned = 1;
+            }
+            else if (context.PageNumberRequested > context.Endpoint.Meta.TotalPages)
+            {
+                context.PageNumberReturned = context.Endpoint.Meta.TotalPages;
             }
             else
             {
-                await GetEntriesPage(context);
+                context.PageNumberReturned = context.PageNumberRequested;
             }
-        }
-        protected async Task GetFilteredEntries(GetEntriesContext context)
-        {
 
-            throw new NotImplementedException();
-        }
-        protected async Task GetEntriesByIds(GetEntriesContext context)
-        {
-            var allIdEntries = await _cache.GetByPrefixAsync<object>(CacheSettings.Endpoint.ByIdPrefix(context));
-
-            var toFetch = allIdEntries.Where(kvp => !context.Ids.Contains(kvp.Key));
-
-            //in case all entries already in cache
-            if(!toFetch.Any())
-            {
-                context.Data = allIdEntries.Select(x => x.Value.Value);
-                return;
-            }
-            _endpointRepository.GetEntriesPage(context);
-            for (int i = 0; i < allIdEntries.Count; i++)
-            {
-
-            }
-            if(allIdEntries == null)
-            var allKeys = context.Ids.Select(id => CacheSettings.Endpoint.BuildGetEntryByIdKey(context, id)).ToArray();
-            var toFetch = new List<string>();
-            var data = new List<object>();
-
-            for (int i = 0; i < allKeys.Count(); i++)
-            {
-
-            var  = await _cache.GetAsync<object>(CacheSettings.Endpoint.Prefix);
-
-            }
-            var listRes = new List<object>();
-            throw new NotImplementedException();
-        }
-        protected async Task GetEntriesPage(GetEntriesContext context)
-        {
             var key = CacheSettings.Endpoint.BuildGetEntriesPageKey(context);
             var entries = await _cache.GetAsync(
                 key,

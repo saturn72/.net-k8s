@@ -34,7 +34,7 @@ namespace EndpointQueryService.Tests.Services.Endpoints
                     },
                 }
             };
-            await srv.GetEntries(ctx);
+            await srv.GetEndpointPage(ctx);
             ctx.IsError.ShouldBeTrue();
         }
 
@@ -64,7 +64,7 @@ namespace EndpointQueryService.Tests.Services.Endpoints
                     }
                 }
             };
-            await srv.GetEntries(ctx);
+            await srv.GetEndpointPage(ctx);
             ctx.IsError.ShouldBeFalse();
             var l = ctx.Data.ShouldBeOfType<List<object>>();
             l.ShouldAllBe(x => exp.Contains(x));

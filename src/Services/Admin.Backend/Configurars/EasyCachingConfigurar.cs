@@ -1,8 +1,6 @@
-﻿using EasyCaching.Core;
-
-namespace EndpointQueryService.Configurars
+﻿namespace Admin.Backend.Configurars
 {
-    public class CachingConfigurar
+    public class EasyCachingConfigurar
     {
         private const string DefaultCachingProviderName = "default";
         public void Configure(IServiceCollection services)

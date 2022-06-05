@@ -14,7 +14,7 @@
         public void Configure()
         {
             new AuthConfigurar().Configure(_services, _configuration);
-            new CachingConfigurar().Configure(_services);
+            new EasyCachingConfigurar().Configure(_services);
             new FirebaseConfigurar().Configure(_services, _configuration);
             new ServicesConfigurar().Configure(_services);
         }

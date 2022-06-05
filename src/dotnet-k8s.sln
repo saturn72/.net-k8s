@@ -22,6 +22,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndpointQueryService", "Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EndpointQueryService.Tests", "Services\EndpointQueryService.Tests\EndpointQueryService.Tests.csproj", "{9E3219EB-5DED-4CAB-889B-1CCE78DA6CF3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{453A6935-A4BA-45C5-A1E3-761DC860B535}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{6CC7923E-3F2D-457B-90E8-0ADE7B3FE886}"
+	ProjectSection(SolutionItems) = preProject
+		Functions\firebase_dockerfile = Functions\firebase_dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Firebase", "Firebase", "{3B246BEC-4B66-4144-B470-32F48EE35552}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin.Backend", "Services\Admin.Backend\Admin.Backend.csproj", "{08F9E944-A697-4422-AAF8-83F453D5A133}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +59,10 @@ Global
 		{9E3219EB-5DED-4CAB-889B-1CCE78DA6CF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E3219EB-5DED-4CAB-889B-1CCE78DA6CF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E3219EB-5DED-4CAB-889B-1CCE78DA6CF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08F9E944-A697-4422-AAF8-83F453D5A133}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08F9E944-A697-4422-AAF8-83F453D5A133}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08F9E944-A697-4422-AAF8-83F453D5A133}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08F9E944-A697-4422-AAF8-83F453D5A133}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +72,8 @@ Global
 		{52F2B175-7F05-46C3-A23D-373C0F083EE1} = {83B4411C-FDFE-414A-8041-2506E2C617A1}
 		{E53302B3-25A4-40E2-A79B-279D25669C7E} = {CD9021A8-279A-48DB-A731-5202FB63EB72}
 		{9E3219EB-5DED-4CAB-889B-1CCE78DA6CF3} = {CD9021A8-279A-48DB-A731-5202FB63EB72}
+		{3B246BEC-4B66-4144-B470-32F48EE35552} = {6CC7923E-3F2D-457B-90E8-0ADE7B3FE886}
+		{08F9E944-A697-4422-AAF8-83F453D5A133} = {CD9021A8-279A-48DB-A731-5202FB63EB72}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19137789-CCA3-49D4-861D-AF05D57D7E24}

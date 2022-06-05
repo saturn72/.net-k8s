@@ -1,14 +1,10 @@
 ﻿using EndpointQueryService.Data.Endpoints;
 using EndpointQueryService.Domain;
 using EndpointQueryService.Services;
-using EndpointQueryService.Services.Endpoints;
-using EndpointQueryService.Services.Rate;
-using EndpointQueryService.Services.Security.Permission;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
 

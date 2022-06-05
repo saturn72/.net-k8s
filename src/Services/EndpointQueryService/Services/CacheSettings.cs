@@ -12,7 +12,7 @@
             public static string BuildGetEntriesPageKey(GetEntriesContext context)
             {
                 var key = BuildGetPathKey(context.Endpoint.Path);
-                return $"{key}:offset={context.OffSet}:pagesize={context.PageSize}";
+                return $"{key}:page={context.PageNumberReturned}";
             }
             public static string BuildGetEntryByIdKey(ActionContext context, string id)
             {

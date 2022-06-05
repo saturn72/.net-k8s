@@ -15,7 +15,7 @@ namespace EndpointQueryService.Data.Endpoints
         }
         public async Task<IEnumerable<EndpointEntry>> GetEntriesPage(GetEntriesContext context)
         {
-            var sql = SqlScripts.GetEntriesByVersion(context);
+            var sql = SqlScripts.GetEntriesPageByVersion(context);
 
             using var con = new SqlConnection(_connectionString);
             return await con.QueryAsync<EndpointEntry>(sql);
@@ -54,14 +54,15 @@ namespace EndpointQueryService.Data.Endpoints
             private static readonly string SelectFrom = $"SELECT FROM {Table}";
             internal static readonly string GetTemplateByPath = $"{SelectFrom} WHERE [Path] = path";
 
-            internal static string GetEntriesByVersion(GetEntriesContext context)
+            internal static string GetEntriesPageByVersion(GetEntriesContext context)
             {
-                var where = $"[{nameof(context.Endpoint.Id)}] = {context.Endpoint.Id} AND " +
-                    $"[Version] = {context.Endpoint.Meta.Version}";
-                return $"{SelectFrom} WHERE {where} " +
-                    //$" ORDER BY {orderBy} {sortOrder} " +
-                    $"OFFSET {context.OffSet} ROWS " +
-              $"FETCH NEXT {context.PageSize} ROWS ONLY;";
+                throw new NotImplementedException();
+              //  var where = $"[{nameof(context.Endpoint.Id)}] = {context.Endpoint.Id} AND " +
+              //      $"[Version] = {context.Endpoint.Meta.Version}";
+              //  return $"{SelectFrom} WHERE {where} " +
+              //      //$" ORDER BY {orderBy} {sortOrder} " +
+              //      $"OFFSET {context.OffSet} ROWS " +
+              //$"FETCH NEXT {context.PageSize} ROWS ONLY;";
             }
 
             internal static string InsertOrUpdateLatest(EndpointInfo info)
