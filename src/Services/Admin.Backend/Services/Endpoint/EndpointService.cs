@@ -1,5 +1,5 @@
 ﻿using Admin.Backend.Domain;
-using Admin.Backend.Services.Events;
+using Endpoints.Common.Events;
 
 namespace Admin.Backend.Services.Endpoint
 {
@@ -34,7 +34,11 @@ namespace Admin.Backend.Services.Endpoint
                 _logger.LogError(context.Error);
                 return;
             }
-            _ = _events.PublishCreated(context);
+            var e = new DomainEvent<CreateContext<EndpointDomainModel>>
+            {
+                Payload = context
+            };
+            _ = _events.Publish(e);
         }
     }
 }

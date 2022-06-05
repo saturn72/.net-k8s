@@ -1,7 +1,7 @@
 ﻿using Admin.Backend.Domain;
 using Admin.Backend.Services.Endpoint;
-using Admin.Backend.Services.Events;
 using Admin.Backend.Services.Security;
+using Endpoints.Common.Events;
 
 namespace Admin.Backend.Configurars
 {
