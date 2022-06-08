@@ -1,0 +1,4 @@
+[submodule "submodules/anyservice"]
+	path = submodules/anyservice
+	url = https://github.com/saturn72/anyservice.git
+	branch = main
