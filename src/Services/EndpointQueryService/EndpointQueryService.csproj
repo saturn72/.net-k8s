@@ -10,6 +10,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AnyService" Version="1.1.141" />
+		<PackageReference Include="AnyService.Core" Version="1.0.43" />
 		<PackageReference Include="Google.Cloud.Firestore" Version="2.5.0" />
 		<PackageReference Include="Google.Cloud.Storage.V1" Version="3.7.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />

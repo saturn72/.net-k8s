@@ -1,8 +1,8 @@
+using AnyService.Events;
 using EndpointQueryService.Domain;
 using EndpointQueryService.Services;
 using EndpointQueryService.Services.ActivityLog;
 using EndpointQueryService.Services.Endpoints;
-using EndpointQueryService.Services.Events;
 using EndpointQueryService.Services.Rate;
 using EndpointQueryService.Services.Security.Permission;
 using Microsoft.AspNetCore.Mvc;
@@ -18,14 +18,14 @@ namespace EndpointQueryService.Controllers
         private readonly IEndpointService _endpointService;
         private readonly IPermissionManager _permissionManager;
         private readonly IRateManager _rateManager;
-        private readonly IEventBus _eventBus;
+        private readonly IDomainEventBus _eventBus;
         private readonly ILogger<EndpointController> _logger;
 
         public EndpointController(
             IEndpointService endpointService,
             IPermissionManager permissionManager,
             IRateManager rateManager,
-            IEventBus eventBus,
+            IDomainEventBus eventBus,
             ILogger<EndpointController> logger
             )
         {

@@ -1,5 +1,5 @@
-﻿using EndpointQueryService.Services.Endpoints;
-using EndpointQueryService.Services.Events;
+﻿using AnyService.Events;
+using EndpointQueryService.Services.Endpoints;
 using EndpointQueryService.Services.Rate;
 using EndpointQueryService.Services.Security.Permission;
 
@@ -15,7 +15,7 @@ namespace EndpointQueryService.Configurars
             services.AddSingleton<IRateManager, RateManager>();
             services.AddSingleton<IRateRepository, DapperRateRepository>();
 
-            services.AddSingleton<IEventBus, EventBus>();
+            services.AddSingleton<IDomainEventBus, DefaultDomainEventsBus>();
         }
     }
 }

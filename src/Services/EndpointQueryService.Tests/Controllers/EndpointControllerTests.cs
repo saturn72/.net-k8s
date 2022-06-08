@@ -1,9 +1,9 @@
-﻿using EndpointQueryService.Controllers;
+﻿using AnyService.Events;
+using EndpointQueryService.Controllers;
 using EndpointQueryService.Domain;
 using EndpointQueryService.Services;
 using EndpointQueryService.Services.ActivityLog;
 using EndpointQueryService.Services.Endpoints;
-using EndpointQueryService.Services.Events;
 using EndpointQueryService.Services.Rate;
 using EndpointQueryService.Services.Security.Permission;
 using Microsoft.AspNetCore.Authentication;
@@ -205,7 +205,7 @@ namespace EndpointQueryService.Tests.Controllers
 
             var ctx = new Mock<HttpContext>();
             ctx.Setup(c => c.User).Returns(user);
-            var eb = new Mock<IEventBus>();
+            var eb = new Mock<IDomainEventBus>();
 
             var ctrl = new EndpointController(es.Object, pm.Object, rm.Object, eb.Object, null);
 
