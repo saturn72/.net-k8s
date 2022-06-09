@@ -213,7 +213,7 @@ namespace EndpointQueryService.Tests.Controllers
             var r = await ctrl.GetEndpointMeta(an, ep, ver);
             r.ShouldBeOfType<OkObjectResult>().Value.ShouldBe(data);
 
-            eb.Verify(e => e.Publish(It.IsAny<ApiConsumptionActivityLogRecord>()), Times.Once());
+            eb.Verify(e => e.Publish(It.Is<string>(k => k == "page-read"), It.Is<DomainEvent>(d => d.Data.GetType() == typeof(ApiConsumptionActivityLogRecord))), Times.Once());
         }
     }
 }

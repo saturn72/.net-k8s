@@ -1,7 +1,7 @@
 ﻿using Admin.Backend.Domain;
 using Admin.Backend.Services.Endpoint;
 using Admin.Backend.Services.Security;
-using Endpoints.Common.Events;
+using AnyService.Events;
 
 namespace Admin.Backend.Configurars
 {
@@ -12,7 +12,7 @@ namespace Admin.Backend.Configurars
             services.AddSingleton<IEndpointService, EndpointService>();
             services.AddSingleton<IValidator<CreateContext<EndpointDomainModel>>, EndpointValidator>();
 
-            services.AddSingleton<IEventPublisher, EventPublisher>();
+            services.AddSingleton<IDomainEventBus, DefaultDomainEventsBus>();
 
             services.AddSingleton<IPermissionManager, PermissionManager>();
         }

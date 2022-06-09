@@ -1,4 +1,6 @@
-﻿namespace Admin.Backend.Configurars
+﻿using AnyService.Events.RabbitMQ;
+
+namespace Admin.Backend.Configurars
 {
     public class ConfigurarRoot
     {
@@ -15,6 +17,7 @@
             new DataConfigurar().Configure(services, configuration);
             new ServicesConfigurar().Configure(services);
             new EasyCachingConfigurar().Configure(services);
+            new RabbitMqConfigurar().Configure(services, configuration);
         }
     }
 }

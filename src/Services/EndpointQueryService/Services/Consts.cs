@@ -6,7 +6,7 @@
         {
             public sealed class Actions
             {
-                public const string GetPage = "get-page";
+                public const string PageRead = "page-read";
                 public const string Meta = "meta";
             }
         }

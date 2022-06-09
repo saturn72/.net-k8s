@@ -61,10 +61,11 @@ namespace EndpointQueryService.Controllers
             {
                 Endpoint = e,
                 Query = Request?.QueryString.ToString(),
+                ActivityType = ApiConsumptionActivityType.GetMeta,
                 ConsumedByUserId = context.UserId,
                 Version = version,
             };
-            _ = _eventBus.Publish(a);
+            _ = _eventBus.Publish(EventKeys.Endpoint.Consumed, a);
             return Ok(e.Meta);
         }
 
@@ -119,10 +120,11 @@ namespace EndpointQueryService.Controllers
             {
                 Endpoint = info,
                 Query = Request?.QueryString.ToString(),
+                ActivityType = ApiConsumptionActivityType.ReadPage,
                 ConsumedByUserId = context.UserId,
                 Version = version,
             };
-            _ = _eventBus.Publish(a);
+            _ = _eventBus.Publish(EventKeys.Endpoint.Consumed, a);
             _ = _rateManager.IncrementAccessToAccountEndpointVersionAction(context);
 
             if (!meta)

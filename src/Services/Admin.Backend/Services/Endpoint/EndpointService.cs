@@ -1,5 +1,5 @@
 ﻿using Admin.Backend.Domain;
-using Endpoints.Common.Events;
+using AnyService.Events;
 
 namespace Admin.Backend.Services.Endpoint
 {
@@ -7,13 +7,13 @@ namespace Admin.Backend.Services.Endpoint
     {
         private readonly IValidator<CreateContext<EndpointDomainModel>> _validator;
         private readonly IEndpointStore _endpoints;
-        private readonly IEventPublisher _events;
+        private readonly IDomainEventBus _events;
         private readonly ILogger<IEndpointService> _logger;
 
         public EndpointService(
             IValidator<CreateContext<EndpointDomainModel>> validator,
             IEndpointStore endpoints,
-            IEventPublisher events,
+            IDomainEventBus events,
             ILogger<IEndpointService> logger)
         {
             _validator = validator;
@@ -34,11 +34,7 @@ namespace Admin.Backend.Services.Endpoint
                 _logger.LogError(context.Error);
                 return;
             }
-            var e = new DomainEvent<CreateContext<EndpointDomainModel>>
-            {
-                Payload = context
-            };
-            _ = _events.Publish(e);
+            _ = _events.Publish(EventKeys.Endpoint.Created, context);
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public record GetEntriesContext : ActionContext
     {
-        public override string ActionName => Consts.Endpoint.Actions.GetPage;
+        public override string ActionName => Consts.Endpoint.Actions.PageRead;
         public int PageNumberRequested { get; init; } = 1;
         public int PageNumberReturned { get; set; } = 1;
         public int? PageSize => (Data as IEnumerable<object>)?.Count();
