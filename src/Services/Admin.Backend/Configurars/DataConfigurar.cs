@@ -8,7 +8,11 @@ namespace Admin.Backend.Configurars
         public void Configure(IServiceCollection services, IConfiguration configuration)
         {
 
-            services.AddSingleton<IEndpointStore>(sp => new MySqlEndpointStore(configuration.GetConnectionString("endpoint")));
+            services.AddSingleton<IEndpointStore>(sp =>
+            {
+                var cs = configuration["CONNECTION_STRING"] ?? throw new ArgumentNullException("CONNECTION_STRING");
+                return new MySqlEndpointStore(cs);
+            });
         }
     }
 }

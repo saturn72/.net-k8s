@@ -32,9 +32,4 @@ namespace Admin.Backend.Services.Endpoint
             return true;
         }
     }
-
-    public interface IValidator<TContext> where TContext : ContextBase
-    {
-        Task<bool> IsValidFor(TContext context);
-    }
 }

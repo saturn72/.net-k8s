@@ -7,8 +7,6 @@ namespace Admin.Backend.Configurars
         internal void Configure(WebApplicationBuilder builder)
         {
             builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
             var services = builder.Services;
             var configuration = builder.Configuration;

@@ -13,6 +13,8 @@ namespace Admin.Backend.Configurars
             services.AddSingleton<IValidator<CreateContext<EndpointDomainModel>>, EndpointValidator>();
 
             services.AddSingleton<IDomainEventBus, DefaultDomainEventsBus>();
+            services.AddSingleton<ISubscriptionManager<DomainEvent>, DefaultSubscriptionManager<DomainEvent>>();
+            services.AddSingleton<ISubscriptionManager<IntegrationEvent>, DefaultSubscriptionManager<IntegrationEvent>>();
 
             services.AddSingleton<IPermissionManager, PermissionManager>();
         }

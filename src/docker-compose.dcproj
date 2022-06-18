@@ -18,7 +18,6 @@
     <None Include="certs\root.csr" />
     <None Include="certs\root.key" />
     <None Include="certs\ssl-generator.sh" />
-    <None Include="docker-compose.override.yml" />
     <None Include="traefik.yml" />
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />

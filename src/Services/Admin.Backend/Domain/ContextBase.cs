@@ -2,6 +2,7 @@
 {
     public abstract record ContextBase
     {
+        public abstract string EntityName { get; }
         public abstract string ActionName { get; }
         private string? _error;
         public bool IsError { get; private set; }

@@ -9,17 +9,15 @@ namespace Admin.Backend
             var builder = WebApplication.CreateBuilder(args);
 
             new ConfigurarRoot().Configure(builder);
-            
+
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
