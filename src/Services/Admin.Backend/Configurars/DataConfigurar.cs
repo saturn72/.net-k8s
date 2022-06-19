@@ -1,4 +1,5 @@
 ﻿using Admin.Backend.Data;
+using Admin.Backend.Services.Datasource;
 using Admin.Backend.Services.Endpoint;
 
 namespace Admin.Backend.Configurars
@@ -12,6 +13,12 @@ namespace Admin.Backend.Configurars
             {
                 var cs = configuration["CONNECTION_STRING"] ?? throw new ArgumentNullException("CONNECTION_STRING");
                 return new MySqlEndpointStore(cs);
+            });
+
+            services.AddSingleton<IDatasourceStore>(sp =>
+            {
+                var cs = configuration["CONNECTION_STRING"] ?? throw new ArgumentNullException("CONNECTION_STRING");
+                return new MySqlDatasourceStore(cs);
             });
         }
     }

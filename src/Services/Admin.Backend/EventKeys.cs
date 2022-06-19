@@ -6,5 +6,9 @@
         {
             internal const string Created = "endpoint.created";
         }
+        internal sealed class Datasource
+        {
+            internal const string Created = "datasource.created";
+        }
     }
 }

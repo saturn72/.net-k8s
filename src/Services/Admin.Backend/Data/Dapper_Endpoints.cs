@@ -2,7 +2,7 @@
 
 namespace Admin.Backend.Data
 {
-    public sealed class Dapper
+    public sealed partial class Dapper
     {
         public sealed class Endpoint
         {
