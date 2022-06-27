@@ -19,14 +19,10 @@
         }
         public void SetErrors(string error, string userError, string? description = null)
         {
-            Error = error;
-            UserError = userError;
-            ErrorDescription = description;
+            Error += error + "\n";
+            UserError += userError + "\n";
+            ErrorDescription += description + "\n";
         }
         public string? UserId { get; set; }
-    }
-    public abstract record ContextBase<TModel> : ContextBase
-    {
-        public TModel? Model { get; init; }
     }
 }

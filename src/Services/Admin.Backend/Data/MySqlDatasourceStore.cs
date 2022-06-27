@@ -13,38 +13,27 @@ namespace Admin.Backend.Data
             _connectionString = connectionString;
         }
 
-        public async Task Create(CreateContext<DatasourceDomainModel> context)
+        public async Task<DatasourceDomainModel?> Create(DatasourceDomainModel datasource)
         {
-            if (context?.Model?.Account?.HasValue() == false ||
-                context?.Model?.Name?.HasValue() == false || 
-                context?.Model?.Type?.HasValue() == false)
-            {
-                context?.SetErrors($"{nameof(context)}: is null, or have empty/null value for {nameof(context.Model.Account)} and/or {nameof(context.Model.Name)} and/or {nameof(context.Model.Type)}",
-                "Bad or missing data");
-                return;
-            }
-
-            var ds = new
-            {
-                context.Model.Account,
-                context.Model.Name,
-                createdByUserId = context.UserId,
-                context.Model.Type,
-            };
             using var con = new MySqlConnection(_connectionString);
-            var result = await con.ExecuteAsync(Dapper.Datasource.Insert, ds);
-            if (result == 1)
-            {
-                context.Response = await con.QuerySingleOrDefaultAsync<string>(Dapper.Datasource.GetIdByAccountAndName, ds);
-                return;
-            }
-            context.Error = "Failed to create new record";
+
+            var result = await con.ExecuteAsync(Dapper.Datasource.Insert, datasource);
+
+            return result == 1 ?
+                await con.QuerySingleOrDefaultAsync<DatasourceDomainModel>(Dapper.Datasource.GetByName, new { datasource.Name }) :
+                default;
         }
 
-        public async Task<DatasourceDomainModel> GetByName(string name)
+        public async Task<DatasourceDomainModel?> GetByName(string name)
         {
             using var con = new MySqlConnection(_connectionString);
             return await con.QuerySingleOrDefaultAsync<DatasourceDomainModel>(Dapper.Datasource.GetByName, new { name });
+        }
+
+        public async Task<DatasourceDomainModel?> GetDatasourceById(string id)
+        {
+            using var con = new MySqlConnection(_connectionString);
+            return await con.QuerySingleOrDefaultAsync<DatasourceDomainModel>(Dapper.Datasource.GetByName, new { id});
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Admin.Backend.Services.Endpoint
 {
     public interface IEndpointStore
     {
-        Task Create(CreateContext<EndpointDomainModel> context);
+        Task<EndpointDomainModel> Create(EndpointDomainModel endpoint);
         Task<EndpointDomainModel> GetByPath(string path);
     }
 }

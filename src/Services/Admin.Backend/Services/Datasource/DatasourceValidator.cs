@@ -17,14 +17,14 @@ namespace Admin.Backend.Services.Datasource
         }
         public async Task<bool> IsValidFor(CreateContext<DatasourceDomainModel> context)
         {
-            var key = DatasourceCaching.BuildGetNameKey(context?.Model?.Name);
+            var key = DatasourceCaching.BuildGetNameKey(context?.ToCreate?.Name);
             var ep = await _cache.GetAsync(key,
-                () => store.GetByName(context.Model.Name),
+                () => store.GetByName(context.ToCreate.Name),
                 DatasourceCaching.Expiration);
 
             if (ep?.HasValue == true)
             {
-                context?.SetErrors($"Datasource already exist: {context.Model}",
+                context?.SetErrors($"Datasource already exist: {context.ToCreate}",
                     "Datasource already exist");
                 return false;
             }

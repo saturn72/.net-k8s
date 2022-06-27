@@ -2,7 +2,8 @@
 {
     public record CreateDatasourceApiModel
     {
-        public string? Name { get; set; }
-        public string? Type { get; set; }
+        public string? AccountId { get; init; }
+        public string? Name { get; init; }
+        public string? Type { get; init; }
     }
 }

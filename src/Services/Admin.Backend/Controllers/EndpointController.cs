@@ -37,7 +37,7 @@ namespace Admin.Backend.Controllers
 
             var context = new CreateContext<EndpointDomainModel>
             {
-                Model = _mapper.Map<EndpointDomainModel>(model),
+                ToCreate = _mapper.Map<EndpointDomainModel>(model),
                 UserId = HttpContext.User?.Identity?.Name ?? "anonymous"
             };
 

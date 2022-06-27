@@ -7,6 +7,12 @@ namespace Admin.Backend.Data
         public sealed class Datasource
         {
             private const string TableName = "datasources";
+            private static readonly string SelectWhere = $"SELECT " +
+                $"{nameof(DatasourceDomainModel.Id)}, " +
+                $"{nameof(DatasourceDomainModel.CreatedByUserId)}, " +
+                $"{nameof(DatasourceDomainModel.Name)}, " +
+                $"{nameof(DatasourceDomainModel.Type)} " +
+                $"FROM {TableName} WHERE ";
 
             public static readonly string Insert = $"INSERT INTO {TableName} " +
                     $"(" +
@@ -22,13 +28,10 @@ namespace Admin.Backend.Data
 
             public static readonly string GetIdByAccountAndName = $"SELECT {nameof(DatasourceDomainModel.Id)} FROM {TableName} WHERE {nameof(DatasourceDomainModel.Account)} = @{nameof(DatasourceDomainModel.Account)} AND {nameof(DatasourceDomainModel.Name)} = @{nameof(DatasourceDomainModel.Name)}";
 
-            public static readonly string GetByName = $"SELECT " +
-                $"{nameof(DatasourceDomainModel.Id)}, " +
-                $"{nameof(DatasourceDomainModel.CreatedByUserId)}, " +
-                $"{nameof(DatasourceDomainModel.Name)}, " +
-                $"{nameof(DatasourceDomainModel.Type)} " +
-                $"FROM {TableName} WHERE {nameof(DatasourceDomainModel.Name)} = @{nameof(DatasourceDomainModel.Name)} AND "+
+            public static readonly string GetByName = SelectWhere + $"{nameof(DatasourceDomainModel.Name)} = @{nameof(DatasourceDomainModel.Name)} AND " +
                 $"{nameof(DatasourceDomainModel.CreatedByUserId)} = @{nameof(DatasourceDomainModel.CreatedByUserId)}";
+
+            public static readonly string GetById = SelectWhere + $"{nameof(DatasourceDomainModel.Id)} = @{nameof(DatasourceDomainModel.Id)}";
         }
     }
 }

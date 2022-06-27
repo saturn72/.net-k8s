@@ -37,9 +37,10 @@ namespace Admin.Backend.Controllers
 
             var context = new CreateContext<DatasourceDomainModel>
             {
-                Model = _mapper.Map<DatasourceDomainModel>(model),
-                UserId = HttpContext.User?.Identity?.Name ?? "anonymous"
+                ToCreate = _mapper.Map<DatasourceDomainModel>(model),
+                UserId = HttpContext.User?.Identity?.Name ?? "anonymous",
             };
+            context.ToCreate.CreatedByUserId = context.UserId;
 
             if (!await _permissionManager.UserIsPermittedForAction(context))
                 return Forbid();
@@ -49,6 +50,26 @@ namespace Admin.Backend.Controllers
             return context.IsError ?
                 BadRequest(context.UserError) :
                 Ok(context.Created);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetDatasourceById(string id)
+        {
+            var context = new ReadByIdContext<DatasourceDomainModel>
+            {
+                Id = id,
+                UserId = HttpContext.User?.Identity?.Name ?? "anonymous",
+            };
+
+            if (!await _permissionManager.UserIsPermittedForAction(context))
+                return Forbid();
+
+            await _datasourceService.GetDatasourceById(context);
+
+            return context.IsError ?
+                BadRequest(context.UserError) :
+                Ok(context.Read);
+
         }
     }
 }

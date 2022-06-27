@@ -15,6 +15,8 @@
         internal sealed class Account
         {
             internal const string Created = "account.created";
+            internal const string Updated = "account.updated";
+            internal const string Deleted = "account.deleted";
         }
     }
 }

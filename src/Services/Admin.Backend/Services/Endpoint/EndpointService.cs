@@ -28,7 +28,8 @@ namespace Admin.Backend.Services.Endpoint
                 _logger.LogInformation(context.Error);
                 return;
             }
-            await _endpoints.Create(context);
+            await _endpoints.Create(context.ToCreate);
+
             if (context.IsError)
             {
                 _logger.LogError(context.Error);

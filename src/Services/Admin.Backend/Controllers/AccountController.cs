@@ -30,16 +30,17 @@ namespace Admin.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateAccountApiModel model)
+        public async Task<IActionResult> CreateAccount([FromBody] CreateAccountApiModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
             var context = new CreateContext<AccountDomainModel>
             {
-                Model = _mapper.Map<AccountDomainModel>(model),
+                ToCreate = _mapper.Map<AccountDomainModel>(model),
                 UserId = HttpContext.User?.Identity?.Name ?? "anonymous"
             };
+            context.ToCreate.CreatedByUserId = context.UserId;
 
             if (!await _permissionManager.UserIsPermittedForAction(context))
                 return Forbid();
@@ -49,6 +50,103 @@ namespace Admin.Backend.Controllers
             return context.IsError ?
                 BadRequest(context.UserError) :
                 Ok(context.Created);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUserAccount()
+        {
+            var subjectId = HttpContext.User?.Identity?.Name;
+            var context = new ReadByIndexContext<AccountDomainModel>
+            {
+                Index = subjectId,
+                IndexName = Defaults.Account.IndexNames.SubjectId,
+                UserId = subjectId,
+            };
+
+            if (!await _permissionManager.UserIsPermittedForAction(context))
+                return Forbid();
+
+            await _accountService.GetAccountBySubjectId(context);
+
+            return context.IsError ?
+                BadRequest(context.UserError) :
+                Ok(context.Read);
+        }
+
+        [HttpGet("{name}")]
+        public async Task<IActionResult> GetAccountByName(string name)
+        {
+            var context = new ReadByIndexContext<AccountDomainModel>
+            {
+                Index = name,
+                IndexName = Defaults.Account.IndexNames.Name,
+                UserId = HttpContext.User?.Identity?.Name,
+            };
+
+            if (!await _permissionManager.UserIsPermittedForAction(context))
+                return Forbid();
+
+            await _accountService.GetAccountByName(context);
+
+            return context.IsError ?
+                BadRequest(context.UserError) :
+                Ok(context.Read);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateAccount([FromBody] UpdateAccountApiModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var context = new UpdateContext<AccountDomainModel>
+            {
+                ToUpdate = _mapper.Map<AccountDomainModel>(model),
+                UserId = HttpContext.User?.Identity?.Name ?? "anonymous"
+            };
+
+            if (!await _permissionManager.UserIsPermittedForAction(context))
+                return Forbid();
+
+            await _accountService.UpdateAccount(context);
+
+            return context.IsError ?
+                BadRequest(context.UserError) :
+                Ok(context.After);
+        }
+
+        [HttpGet("{accountId}")]
+        public async Task<IActionResult> GetDeleteAccountToken(string accountId)
+        {
+            var context = new DeleteContext<AccountDomainModel>
+            {
+                IdToDelete = accountId,
+                UserId = HttpContext.User?.Identity?.Name,
+            };
+            if (!await _permissionManager.UserIsPermittedForAction(context))
+                return Forbid();
+
+            var token = await _accountService.GetAccountDeletionToken(context.UserId, accountId);
+            return Ok(token);
+        }
+        [HttpDelete("{accountId}/{token}")]
+        public async Task<IActionResult> DeleteAccount(string accountId, string token)
+        {
+            var context = new DeleteContext<AccountDomainModel>
+            {
+                IdToDelete = accountId,
+                DeleteToken = token,
+                UserId = HttpContext.User?.Identity?.Name,
+            };
+
+            if (!await _permissionManager.UserIsPermittedForAction(context))
+                return Forbid();
+
+            await _accountService.DeleteAccountById(context);
+
+            return context.IsError ?
+                BadRequest(context.UserError) :
+                Ok(context.Deleted.Id);
         }
     }
 }

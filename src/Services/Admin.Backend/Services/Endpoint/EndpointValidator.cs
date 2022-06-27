@@ -17,14 +17,14 @@ namespace Admin.Backend.Services.Endpoint
         }
         public async Task<bool> IsValidFor(CreateContext<EndpointDomainModel> context)
         {
-            var key = EndpointCaching.BuildGetPathKey(context?.Model?.Path);
+            var key = EndpointCaching.BuildGetPathKey(context?.ToCreate?.Path);
             var ep = await _cache.GetAsync(key,
-                () => _endpoints.GetByPath(context.Model.Path),
+                () => _endpoints.GetByPath(context.ToCreate.Path),
                 EndpointCaching.Expiration);
 
             if (ep?.HasValue == true)
             {
-                context?.SetErrors($"Endpoint already exist: {context.Model}",
+                context?.SetErrors($"Endpoint already exist: {context.ToCreate}",
                     "Endpoint already exist");
                 return false;
             }

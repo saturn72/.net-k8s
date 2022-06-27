@@ -4,7 +4,8 @@ namespace Admin.Backend.Services.Datasource
 {
     public interface IDatasourceStore
     {
-        Task Create(CreateContext<DatasourceDomainModel> context);
+        Task<DatasourceDomainModel> Create(DatasourceDomainModel datasource);
         Task<DatasourceDomainModel> GetByName(string name);
+        Task<DatasourceDomainModel?> GetDatasourceById(string? id);
     }
 }

@@ -13,32 +13,15 @@ namespace Admin.Backend.Data
             _connectionString = connectionString;
         }
 
-        public async Task Create(CreateContext<EndpointDomainModel> context)
+        public async Task<EndpointDomainModel?> Create(EndpointDomainModel endpoint)
         {
-            if (context?.Model?.Name?.HasValue() == false || context?.Model?.Account?.HasValue() == false)
-            {
-                context?.SetErrors($"{nameof(context)}: is null, or have empty/null value for {nameof(context.Model.Name)} of  {nameof(context.Model.Account)}",
-                "Bad or missing data");
-                return;
-            }
-
-            var ep = new
-            {
-                context.Model.Account,
-                context.Model.Name,
-                createdByUserId = context.UserId,
-                context.Model.Path,
-                context.Model.PathDelimiter,
-                context.Model.Version,
-            };
             using var con = new MySqlConnection(_connectionString);
-            var result = await con.ExecuteAsync(Dapper.Endpoint.Insert, ep);
-            if (result == 1)
-            {
-                context.Response = await con.QuerySingleOrDefaultAsync<string>(Dapper.Endpoint.GetIdByPath, ep);
-                return;
-            }
-            context.Error = "Failed to create new record";
+
+            var result = await con.ExecuteAsync(Dapper.Endpoint.Insert, endpoint);
+
+            return result == 1 ?
+                await con.QuerySingleOrDefaultAsync<EndpointDomainModel>(Dapper.Endpoint.GetByPath, endpoint.Path) :
+                default;
         }
 
         public async Task<EndpointDomainModel> GetByPath(string path)

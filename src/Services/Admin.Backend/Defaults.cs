@@ -2,7 +2,24 @@
 {
     internal sealed class Defaults
     {
-        public class Endpoint
+        internal sealed class Account
+        {
+            internal sealed class IndexNames
+            {
+                internal const string SubjectId = "subject-id";
+                internal const string Name = "name";
+            }
+        }
+
+        internal sealed class Datasource
+        {
+            internal sealed class IndexNames
+            {
+                internal const string Id = "id";
+            }
+        }
+
+        internal sealed class Endpoint
         {
             public const string PathDelimiter = "/";
         }

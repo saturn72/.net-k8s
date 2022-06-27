@@ -1,5 +1,6 @@
 ﻿using Admin.Backend.Domain;
 using Admin.Backend.Services;
+using Admin.Backend.Services.Account;
 using Admin.Backend.Services.Datasource;
 using Admin.Backend.Services.Endpoint;
 using Admin.Backend.Services.Security;
@@ -11,12 +12,15 @@ namespace Admin.Backend.Configurars
     {
         public void Configure(IServiceCollection services)
         {
-            services.AddSingleton<IEndpointService, EndpointService>();
-            services.AddSingleton<IValidator<CreateContext<EndpointDomainModel>>, EndpointValidator>();
-
+            services.AddSingleton<IAccountService, AccountService>();
+            services.AddSingleton<IValidator<CreateContext<AccountDomainModel>>, AccountValidator>();
+            services.AddSingleton<IValidator<ReadByIdContext<AccountDomainModel>>, AccountValidator>();
 
             services.AddSingleton<IDatasourceService, DatasourceService>();
             services.AddSingleton<IValidator<CreateContext<DatasourceDomainModel>>, DatasourceValidator>();
+
+            services.AddSingleton<IEndpointService, EndpointService>();
+            services.AddSingleton<IValidator<CreateContext<EndpointDomainModel>>, EndpointValidator>();
 
             services.AddSingleton<IDomainEventBus, DefaultDomainEventsBus>();
             services.AddSingleton<ISubscriptionManager<DomainEvent>, DefaultSubscriptionManager<DomainEvent>>();
