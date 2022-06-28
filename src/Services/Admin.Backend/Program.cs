@@ -10,15 +10,11 @@ namespace Admin.Backend
 
             new ConfigurarRoot().Configure(builder);
 
-            builder.Services.AddSwaggerGen();
-
             var app = builder.Build();
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

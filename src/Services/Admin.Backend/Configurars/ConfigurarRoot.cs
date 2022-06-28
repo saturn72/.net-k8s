@@ -11,6 +11,7 @@ namespace Admin.Backend.Configurars
             var services = builder.Services;
             var configuration = builder.Configuration;
 
+            new AuthenticationConfigurar().Configure(services);
             new AutoMapperConfigurar().Configure(services);
             new DataConfigurar().Configure(services, configuration);
             new ServicesConfigurar().Configure(services);

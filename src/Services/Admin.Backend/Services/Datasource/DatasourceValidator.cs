@@ -3,7 +3,9 @@ using EasyCaching.Core;
 
 namespace Admin.Backend.Services.Datasource
 {
-    public class DatasourceValidator : IValidator<CreateContext<DatasourceDomainModel>>
+    public class DatasourceValidator :
+        IValidator<CreateContext<DatasourceDomainModel>>,
+        IValidator<ReadByIdContext<DatasourceDomainModel>>
     {
         private readonly IDatasourceStore store;
         private readonly IEasyCachingProvider _cache;
@@ -30,6 +32,11 @@ namespace Admin.Backend.Services.Datasource
             }
 
             return true;
+        }
+
+        public Task<bool> IsValidFor(ReadByIdContext<DatasourceDomainModel> context)
+        {
+            throw new NotImplementedException();
         }
     }
 }

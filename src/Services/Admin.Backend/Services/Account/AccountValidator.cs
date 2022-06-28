@@ -6,7 +6,9 @@ namespace Admin.Backend.Services.Account
     public class AccountValidator :
         IValidator<CreateContext<AccountDomainModel>>,
         IValidator<ReadByIdContext<AccountDomainModel>>,
-        IValidator<UpdateContext<AccountDomainModel>>
+        IValidator<ReadByIndexContext<AccountDomainModel>>,
+        IValidator<UpdateContext<AccountDomainModel>>,
+        IValidator<DeleteContext<AccountDomainModel>>
     {
         private readonly IAccountStore _store;
         private readonly IEasyCachingProvider _cache;
@@ -59,6 +61,16 @@ namespace Admin.Backend.Services.Account
             }
 
             return true;
+        }
+
+        public Task<bool> IsValidFor(DeleteContext<AccountDomainModel> context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> IsValidFor(ReadByIndexContext<AccountDomainModel> context)
+        {
+            throw new NotImplementedException();
         }
 
         private async Task<CacheValue<AccountDomainModel>> GetAccountByName(string? name)

@@ -15,9 +15,13 @@ namespace Admin.Backend.Configurars
             services.AddSingleton<IAccountService, AccountService>();
             services.AddSingleton<IValidator<CreateContext<AccountDomainModel>>, AccountValidator>();
             services.AddSingleton<IValidator<ReadByIdContext<AccountDomainModel>>, AccountValidator>();
+            services.AddSingleton<IValidator<ReadByIndexContext<AccountDomainModel>>, AccountValidator>();
+            services.AddSingleton<IValidator<UpdateContext<AccountDomainModel>>, AccountValidator>();
+            services.AddSingleton<IValidator<DeleteContext<AccountDomainModel>>, AccountValidator>();
 
             services.AddSingleton<IDatasourceService, DatasourceService>();
             services.AddSingleton<IValidator<CreateContext<DatasourceDomainModel>>, DatasourceValidator>();
+            services.AddSingleton<IValidator<ReadByIdContext<DatasourceDomainModel>>, DatasourceValidator>();
 
             services.AddSingleton<IEndpointService, EndpointService>();
             services.AddSingleton<IValidator<CreateContext<EndpointDomainModel>>, EndpointValidator>();

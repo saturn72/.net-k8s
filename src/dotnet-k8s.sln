@@ -65,6 +65,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnyService.EasyCaching.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnyService.EntityFramework", "..\submodules\anyservice\src\AnyServiceModules\EntityFramework\AnyService.EntityFramework\AnyService.EntityFramework.csproj", "{A13A1468-FBC1-47FA-A1A9-4339E40F709C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin.Backend.Tests", "Services\Admin.Backend.Tests\Admin.Backend.Tests.csproj", "{3749F9E8-FDA4-47C3-A510-55A27008EFCA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -147,6 +149,10 @@ Global
 		{A13A1468-FBC1-47FA-A1A9-4339E40F709C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A13A1468-FBC1-47FA-A1A9-4339E40F709C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A13A1468-FBC1-47FA-A1A9-4339E40F709C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3749F9E8-FDA4-47C3-A510-55A27008EFCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3749F9E8-FDA4-47C3-A510-55A27008EFCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3749F9E8-FDA4-47C3-A510-55A27008EFCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3749F9E8-FDA4-47C3-A510-55A27008EFCA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -172,6 +178,7 @@ Global
 		{D63691FC-B53A-4D10-886B-5D5D1345C9B5} = {0EDC31C3-629A-4953-9C2E-949AAB045C1F}
 		{5927CF28-C369-424F-97F4-894EEDA0287C} = {0EDC31C3-629A-4953-9C2E-949AAB045C1F}
 		{A13A1468-FBC1-47FA-A1A9-4339E40F709C} = {0EDC31C3-629A-4953-9C2E-949AAB045C1F}
+		{3749F9E8-FDA4-47C3-A510-55A27008EFCA} = {CD9021A8-279A-48DB-A731-5202FB63EB72}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19137789-CCA3-49D4-861D-AF05D57D7E24}

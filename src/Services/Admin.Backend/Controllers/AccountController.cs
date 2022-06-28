@@ -3,11 +3,13 @@ using Admin.Backend.Models;
 using Admin.Backend.Services.Account;
 using Admin.Backend.Services.Security;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Admin.Backend.Controllers
 {
     [ApiController]
+    [Authorize(Roles ="registered")]
     [Route("admin/account")]
     public class AccountController : ControllerBase
     {
@@ -53,7 +55,7 @@ namespace Admin.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserAccount()
+        public async Task<IActionResult> GetAccountBySubjectId()
         {
             var subjectId = HttpContext.User?.Identity?.Name;
             var context = new ReadByIndexContext<AccountDomainModel>
@@ -129,6 +131,7 @@ namespace Admin.Backend.Controllers
             var token = await _accountService.GetAccountDeletionToken(context.UserId, accountId);
             return Ok(token);
         }
+
         [HttpDelete("{accountId}/{token}")]
         public async Task<IActionResult> DeleteAccount(string accountId, string token)
         {
