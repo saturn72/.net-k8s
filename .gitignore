@@ -25,7 +25,7 @@ Thumbs.db
 [Oo]ut/
 [Tt]mp/
 node_modules/
-
+.nuxt/
 
 *.lib
 *.sbr
