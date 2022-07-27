@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  mysql-admin:
+    image: mysql:5.7.38
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'endpoints-admin'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - default-volume:/var/lib/mysql
+
+  rabbitmq:
+    image: rabbitmq:3.10.5-management-alpine
+    container_name: "rabbitmq"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  admin:
+    build:
+      context: .
+      dockerfile: Services/Admin.Backend/Dockerfile
+    ports:
+      - "5000:80"
+      - "5010:443"
+    environment:
+      - CONNECTION_STRING=server=mysql-admin;port=3306;uid=root;pwd=password;database=endpoints-admin
+    depends_on:
+      - rabbitmq
+      - mysql-admin
+  
+volumes:
+  default-volume:
+
+  #reverse-proxy:
+  #  image: traefik:v2.6
+  #  container_name: traefik
+  #  ports:
+  #  - "81:80"
+  #  - "443:443"
+  #  - "8080:8080"
+  #  volumes:
+  #  - /var/run/docker.sock:/var/run/docker.sock
+  #  - ./traefik.yml:/etc/traefik/traefik.yml
+
+  #firebase:
+  #  image: ehealthafrica/firebase-emulator:latest
+  #  build: .
+
+  #  volumes:
+  #    - ./firebase/emulators/:/opt/workspace:cached
+  #    - ./firebase/bin/:/root/.cache:cached
+  #    - ./firebase/config/:/root/.config:cached
+  #  ports:
+  #    - 4000:4000 # Emulator Suite UI
+  #    - 5000:5000 # Firebase Hosting
+  #    - 5001:5001 # Clound Functions
+  #    - 9000:9000 # Realtime Database
+  #    - 8080:8080 # Cloud Firestore
+  #    - 8085:8085 # Cloud Pub/Sub
+  #  working_dir: /opt/workspace
+  #  networks:
+  #    - backend
+  #  command: bash
+  #  tty: true
+
+
+  #identity:
+  #  image: ${DOCKER_REGISTRY-}identity
+  #  container_name: identity
+  #  ports:
+  #  - "5010:80"
+  #  - "5011:443"
+  #  labels:
+  #    - "traefik.enable=true"
+  #    - "traefik.http.routers.identity.rule=Host(`identity`)"
+  #    - "traefik.http.routers.identity.service=identity"
+  #    - "traefik.http.routers.identity.entrypoints=websecure"
+  #    # - "traefik.http.services.identity.loadbalancer.servers.url=http://identity"
+  #    - "traefik.http.routers.identity.tls=true"
+  #    - "traefik.http.services.identity.loadbalancer.server.port=5010"
+  #  build:
+  #    context: .
+  #    dockerfile: Infrastructure/IdentityServer/Dockerfile
+  
+  #endpoint-query:
+  #  build:
+  #    context: .
+  #    dockerfile: Services/EndpointQueryService/Dockerfile
+  #  depends_on:
+  #    - identity
+  #    - firebase
+  #    - rabbitmq
